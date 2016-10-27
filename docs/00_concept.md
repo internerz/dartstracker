@@ -36,3 +36,15 @@ Es können sich diverse Statistiken angeschaut werden:
 - mehr als 100 Punkte mit 3 Darts
 - mehr als 140 Punkte mit 3 Darts
 - Anzahl 180 Punkte mit 3 Darts
+
+## Umsetzung
+Die Web-App inkl. der dahinter liegenden Website soll mit einem **MVC-Framework** umgesetzt werden. Das Arbeiten mit dem MVC Pattern hat den Vorteil, dass Code sauber getrennt werden kann. Außerdem kann so auch Backend und Frontend für die Zusammenarbeit bzw. Aufteilung in der Gruppe klarer voneinadner getrennt werden. 
+
+### Framework
+Zum Einsatz kommen soll das PHP Framework **Laravel 5.3**. Dieses ist neben Zend und Symfony am weitesten verbreitet, bietet aber im Vergleich zu Zend moderner und soll nicht so komplex wie Symfony sein. 
+
+### Template Engine
+Laravel arbeitet mit der Template Engine **Blade**, mit der man die Views erstellen kann, die dann durch die Controller befüllt werden. 
+
+### CSS-Präprozessor
+Um effiktiver CSS zu schreiben, soll der CSS-Präprozessor Sass mit der SCSS-Syntax zum Einsatz kommen. Dadurch können Styles in einzelne Dateien ausgelagert, einfache Kontrollstrukturen, Funktionen und Variablen genutzt werden. Die einzelnen Dateien werden dann zu einer optimierten CSS-Datei gerendert.
