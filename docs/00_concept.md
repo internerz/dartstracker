@@ -48,3 +48,40 @@ Laravel arbeitet mit der Template Engine **Blade**, mit der man die Views erstel
 
 ### CSS-Präprozessor
 Um effiktiver CSS zu schreiben, soll der CSS-Präprozessor Sass mit der SCSS-Syntax zum Einsatz kommen. Dadurch können Styles in einzelne Dateien ausgelagert, einfache Kontrollstrukturen, Funktionen und Variablen genutzt werden. Die einzelnen Dateien werden dann zu einer optimierten CSS-Datei gerendert.
+
+## Routes
+###### GET: /
+Startseite, Login
+
+###### GET: /login
+Anzeige des Logins
+
+###### POST: /login
+Verarbeitung des Logins
+
+###### GET: /logout
+Logout, Weiterleitung auf /login mit Logout-Hinweis
+
+###### GET: /user
+Profil anzeigen
+
+###### GET: /users/create oder /register
+Registrierungsformular anzeigen
+
+###### POST: /users/create oder /register
+Registrierungsformular validieren, verarbeiten und Benutzer anlegen
+
+###### GET: /users/update
+Registrierungsformular mit aktuellen Daten zum Bearbeiten anzeigen
+
+###### POST: /users/update
+Formular validieren, verarbeiten und Benutzerdaten aktualisieren
+
+###### GET: /game
+Dartscheibe anzeigen
+
+###### POST: /game/create
+Neues Spiel tracken
+
+###### GET: /statistics
+Anzeige der Statistiken
