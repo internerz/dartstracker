@@ -27,7 +27,7 @@ Als weiterer Spielmodus wird Cricket unterstützt. Hier gilt es, die Zahlen von 
 Dartboard (https://commons.wikimedia.org/wiki/File:Dartboard.svg)
 
 ### Spieler / Teams
-Beim Öffnen der App kann ausgewählt werden, wie viele Spieler an einer Partie teilnehmen und ob sie in Teams aufgeteilt sind. Normalerweise spielen 2 Spieler gegeneinander, es können aber auch mehrere Spieler ausgewählt werden. 
+Beim Starten eines Spiels kann ausgewählt werden, wie viele Spieler an einer Partie teilnehmen. Falls sie ebenfalls registriert sind, können sie als Gegner hinzugefügt werden, so dass das Spiel und Statisken dem richtigen Spieler zugeordnert werden können.
 
 ### Statistiken
 Es können sich diverse Statistiken angeschaut werden: 
@@ -37,11 +37,17 @@ Es können sich diverse Statistiken angeschaut werden:
 - mehr als 140 Punkte mit 3 Darts
 - Anzahl 180 Punkte mit 3 Darts
 
+### Spielhinweise
+Aktivierbar sind Hinweise, die einem im fortgeschrittenen Spiel zeigen, wie man bspw. ein Spiel beenden kann. Hat man noch z.B. noch 40 Punkte zu werfen und muss mit einem Double Out das Spiel beenden, würde die Doppel-20 hervorgehoben werden.
+
 ## Umsetzung
 Die Web-App inkl. der dahinter liegenden Website soll mit einem **MVC-Framework** umgesetzt werden. Das Arbeiten mit dem MVC Pattern hat den Vorteil, dass Code sauber getrennt werden kann. Außerdem kann so auch Backend und Frontend für die Zusammenarbeit bzw. Aufteilung in der Gruppe klarer voneinadner getrennt werden. 
 
 ### Framework
 Zum Einsatz kommen soll das PHP Framework **Laravel 5.3**. Dieses ist neben Zend und Symfony am weitesten verbreitet, bietet aber im Vergleich zu Zend moderner und soll nicht so komplex wie Symfony sein. 
+
+### Datenbank
+Die Daten werden in einer MySQL-Datenbank gespeichert.
 
 ### Template Engine
 Laravel arbeitet mit der Template Engine **Blade**, mit der man die Views erstellen kann, die dann durch die Controller befüllt werden. 
@@ -85,3 +91,19 @@ Neues Spiel tracken
 
 ###### GET: /statistics
 Anzeige der Statistiken
+
+## Meilensteine
+### Meilenstein #1: Backend, Routes, Login
+Im ersten Schritt wird das Backend mit den Routes sowie der Login (inkl. Registrierung) umgesetzt, so dass man sich anmelden und durch die App navigieren kann.
+
+### Meilenstein #2: Spiel tracken
+Im nächsten Schritt wird die Dartscheibe erstellt und das Regelwerk eingebaut, so dass man ein einzelnes Spiel tracken kann.
+
+### Meilenstein #3: Hinweise
+Darauffolgend werden die Hinweise im Spiel erstellt.
+
+### Meilenstein #4: Statistiken
+Im letzten Schritt werden die Statistiken eingebaut.
+
+### Tasks mit Trello
+Die einzelnen Arbeitspakete und Aufgabe werden mit Trello erstellt und verwaltet und so den einzelnen Projektteilnehmern zugewiesen.
