@@ -1,5 +1,8 @@
-# Darts Tracker
-Darts Tracker ist eine Web-App, die es einem ermöglicht, Dart-Spiele zu notieren und Statistiken über seine Spiele zu verfolgen. 
+# Projektplan "Darts Tracker"
+Darts Tracker ist eine Web-App, die es einem ermöglicht, Dart-Spiele zu notieren und Statistiken über seine Spiele zu verfolgen. Ziel ist es, sich mit verschiedenen, aktuell gebräuchlichen Technologien zu beschäftigen, darunter PHP, das MVC-Framework Laravel, Sass und Docker.
+
+## Team
+Das Team besteht aus [Hendrik Jahnert](https://github.com/Ikke007) (hendrik.jahnert@haw-hamburg.de), [Tobias Schweisfurth](https://github.com/Arcraith) (tobias.schweisfurth@haw-hamburg.de) und [Benjamin Strilziw](https://github.com/internerz) (benjamin.strilziw@haw-hamburg.de). Tobias Schweisfurth agiert als Projektleiter. 
 
 ## Zielplattformen
 Als Web-App läuft der Darts Tracker im Browser und damit auf allen Geräten, die einen grafischen Browser besitzen. Hauptsächlich ist es für User gedacht, die Smartphone oder Tablet Stift und Zettel vorziehen. Entsprechend ist die Web-App für Toucheingaben und kleine Displays optimiert. 
@@ -55,6 +58,22 @@ Laravel arbeitet mit der Template Engine **Blade**, mit der man die Views erstel
 ### CSS-Präprozessor
 Um effiktiver CSS zu schreiben, soll der CSS-Präprozessor Sass mit der SCSS-Syntax zum Einsatz kommen. Dadurch können Styles in einzelne Dateien ausgelagert, einfache Kontrollstrukturen, Funktionen und Variablen genutzt werden. Die einzelnen Dateien werden dann zu einer optimierten CSS-Datei gerendert.
 
+## Meilensteine
+### Meilenstein #1 - 21.11.2016: Backend, Routes, Login
+Im ersten Schritt wird das Backend mit den Routes sowie der Login (inkl. Registrierung) umgesetzt, so dass man sich anmelden und durch die App navigieren kann.
+
+### Meilenstein #2 - 05.12.2016: Spiel tracken
+Im nächsten Schritt wird die Dartscheibe erstellt und das Regelwerk eingebaut, so dass man ein einzelnes Spiel tracken kann.
+
+### Meilenstein #3 - 19.12.2016: Hinweise
+Darauffolgend werden die Hinweise im Spiel erstellt.
+
+### Meilenstein #4 - 16.01.2017: Statistiken
+Im letzten Schritt werden die Statistiken eingebaut.
+
+### Tasks mit Trello
+Die einzelnen Arbeitspakete und Aufgabe werden mit Trello erstellt und verwaltet und so den einzelnen Projektteilnehmern zugewiesen.
+
 ## Routes
 ###### GET: /
 Startseite, Login
@@ -91,19 +110,3 @@ Neues Spiel tracken
 
 ###### GET: /statistics
 Anzeige der Statistiken
-
-## Meilensteine
-### Meilenstein #1: Backend, Routes, Login
-Im ersten Schritt wird das Backend mit den Routes sowie der Login (inkl. Registrierung) umgesetzt, so dass man sich anmelden und durch die App navigieren kann.
-
-### Meilenstein #2: Spiel tracken
-Im nächsten Schritt wird die Dartscheibe erstellt und das Regelwerk eingebaut, so dass man ein einzelnes Spiel tracken kann.
-
-### Meilenstein #3: Hinweise
-Darauffolgend werden die Hinweise im Spiel erstellt.
-
-### Meilenstein #4: Statistiken
-Im letzten Schritt werden die Statistiken eingebaut.
-
-### Tasks mit Trello
-Die einzelnen Arbeitspakete und Aufgabe werden mit Trello erstellt und verwaltet und so den einzelnen Projektteilnehmern zugewiesen.
