@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index');
+Route::get('/game', 'GameController@index');
+Route::get('/game/{game}', 'GameController@view');
+Route::get('/game/create', 'GameController@create');
+Route::post('/game', 'GameController@store');

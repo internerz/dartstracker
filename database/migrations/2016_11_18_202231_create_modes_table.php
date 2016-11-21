@@ -17,6 +17,24 @@ class CreateModesTable extends Migration
             $table->increments('id');
             $table->string('name');
         });
+
+        DB::table('modes')->insert(
+            array(
+                'name' => '501',
+            )
+        );
+
+        DB::table('modes')->insert(
+            array(
+                'name' => '301',
+            )
+        );
+
+        DB::table('modes')->insert(
+            array(
+                'name' => 'Cricket',
+            )
+        );
     }
 
     /**

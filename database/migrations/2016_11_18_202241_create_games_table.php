@@ -18,7 +18,7 @@ class CreateGamesTable extends Migration
             $table->timestamps();
             $table->integer('mode')->unsigned();
             $table->integer('ruleset');
-            $table->integer('winner_user_id')->unsigned();
+            $table->integer('winner_user_id')->unsigned()->nullable();
             $table->foreign('mode')->references('id')->on('modes');
             $table->foreign('winner_user_id')->references('id')->on('users');
         });

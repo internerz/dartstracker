@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
+    protected $fillable = [
+        'mode', 'ruleset',
+    ];
+
     public function users() {
-        return $this->hasManyThrough(User::class, Game::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function legs() {
