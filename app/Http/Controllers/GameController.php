@@ -32,7 +32,7 @@ class GameController extends Controller
         // TODO: validate user input
         // TODO: throw errors
         $game = new Game();
-        $game->mode = $request->get('mode');
+        $game->mode_id = $request->get('mode');
         $game->ruleset = $request->get('ruleset');
         $game->save();
 
@@ -44,5 +44,11 @@ class GameController extends Controller
         ));
 
         return redirect()->to('/game/'.$game->id);
+    }
+
+    public function storePoints(Request $request, Game $game) {
+        // TODO: verfiy user data
+
+        dd($request->all());
     }
 }

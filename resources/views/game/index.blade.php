@@ -12,7 +12,7 @@
                         @if (count($games) > 0)
                             <ul class="list-group">
                                 @foreach ($games as $game)
-                                    <li class="list-group-item" <?php echo ($game->winner_user_id > 0) ? ' disabled' : ''; ?>><a href="/game/{{ $game->id }}">{{ $game->created_at }}, {{ $game->mode->name }}</a></li>
+                                    <li class="list-group-item<?php echo ($game->winner_user_id > 0) ? ' disabled' : ''; ?>" ><a href="/game/{{ $game->id }}">{{ $game->created_at }}, Mode: {{ $game->mode->name }}</a></li>
                                 @endforeach
                             </ul>
                         @endif
