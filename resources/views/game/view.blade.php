@@ -10,6 +10,11 @@
                     <div class="panel-body">
                         Mode: {{ $game->mode->name }}<br />
                         Ruleset: {{ $game->ruleset }}<br />
+                        Number of legs to win: {{ $game->number_of_legs_to_win }}<br />
+                        Current leg: {{ $game->legs->count() }}<br />
+                        @if ($currentLeg)
+                        Current leg ID: {{ $currentLeg->id }}<br />
+                        @endif
                         Players: @foreach ($game->users as $user)
                             {{ $user->name }},
                         @endforeach
@@ -20,11 +25,12 @@
                     <div class="panel-heading">Round</div>
 
                     <div class="panel-body">
-                        Active player: {{ $game->users->first()->name }}
+                        Active player: <span id="playerName">{{ $game->users->first()->name }}</span>
                     </div>
 
                     <div class="panel-heading">Score</div>
 
+                    @if ($currentLeg)
                     <div class="panel-body" id="points">
                         @for ($i = 0; $i <= 21; $i++)
                             @if ($i == 0)
@@ -45,27 +51,24 @@
                             <button type="submit" class="btn btn-primary disabled" id="submit">Submit</button>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 
+    @if ($currentLeg)
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
         $( document ).ready(function() {
             var points = {};
-            points['player'] = "{{ \Auth::user()->id }}";
+            var player = {
+                id: "{{ \Auth::user()->id }}",
+                name: "{{ \Auth::user()->name }}",
+            };
             points['points'] = [];
             var button = $('#submit');
-
             var csrf_token = $('meta[name="csrf-token"]').attr('content');
-            $.ajaxPrefilter(function(options, originalOptions, jqXHR){
-                if (options.type.toLowerCase() === "post") {
-                    options.data = options.data || "";
-                    options.data += options.data?"&":"";
-                    options.data += "_token=" + csrf_token;
-                }
-            });
 
             $('#points').find('a').click(function() {
                 if ($(this).data('points') && points['points'].length < 3) {
@@ -87,16 +90,27 @@
 
             button.click(function() {
                 var data = JSON.stringify(points);
-console.log(data);
-//                button.addClass('disabled');
-//                points['points'] = [];
+                button.addClass('disabled');
+                points['points'] = [];
 
                 $.ajax({
                     type: "POST",
                     url: window.location.href.split('#')[0],
-                    data: data,
-                    success: function() {
-                        console.log('success');
+                    data: {
+                        _token: csrf_token,
+                        user: player.id,
+                        leg: "{{ $currentLeg->id }}",
+                        points: data,
+                    },
+                    success: function(response) {
+                        console.log('response', JSON.parse(response));
+                        console.log('nextPlayerId', JSON.parse(response)['nextPlayerId']);
+                        player = {
+                            id: JSON.parse(response)['nextPlayerId'],
+                            name: JSON.parse(response)['nextPlayerName']
+                        };
+
+                        updatePlayerStrings();
                     },
                     dataType: 'json'
                 });
@@ -104,7 +118,10 @@ console.log(data);
                 return false;
             });
 
-
+            function updatePlayerStrings() {
+                $('#playerName').text(player.name);
+            }
         });
     </script>
+    @endif
 @endsection

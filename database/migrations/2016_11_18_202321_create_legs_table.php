@@ -16,7 +16,7 @@ class CreateLegsTable extends Migration
         Schema::create('legs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('game_id')->unsigned();
-            $table->integer('winner_user_id')->unsigned();
+            $table->integer('winner_user_id')->unsigned()->nullable();
             $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
             $table->foreign('winner_user_id')->references('id')->on('users');
         });

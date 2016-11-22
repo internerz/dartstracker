@@ -17,6 +17,8 @@ class CreatePointsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->integer('leg_id')->unsigned();
+            $table->tinyInteger('points')->unsigned();
+            $table->tinyInteger('multiplier')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('leg_id')->references('id')->on('legs')->onDelete('cascade');
         });
