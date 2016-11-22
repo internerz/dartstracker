@@ -12,16 +12,16 @@ use Illuminate\Http\Request;
 class GameController extends Controller
 {
     public function index() {
-        $games = Game::all()->sortByDesc('created_at');
+        $games = Game::with('mode')->get()->sortByDesc('created_at');
 
         return view('game.index', compact('games'));
     }
 
     public function view(Game $game) {
-        $game = Game::find($game->id);
+        $game = Game::with('users')->with('legs')->with('mode')->where('id', $game->id)->get()->first();
         // TODO: error handling when no game was found (e.g. a user entered a non-existing id)
 
-        $currentLeg = $game->legs()->where('winner_user_id', null)->first();
+        $currentLeg = Game::find($game->id)->legs()->where('winner_user_id', null)->first();
 
         return view('game.view', compact('game', 'currentLeg'));
     }
