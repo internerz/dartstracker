@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Game;
 use App\Leg;
 use App\Mode;
+use App\GameOrder;
 use App\Point;
 use App\User;
 use Illuminate\Http\Request;
@@ -49,6 +50,7 @@ class GameController extends Controller
         ));
 
         $this->createLeg($game);
+        $this->setOrder($game);
 
         return redirect()->to('/game/'.$game->id);
     }
@@ -80,5 +82,17 @@ class GameController extends Controller
 
     private function getNextPlayer() {
         return User::find(2);
+    }
+
+    private function setOrder(Game $game) {
+        $users = $game->users->shuffle();
+
+        foreach ($users as $position => $user) {
+            $order = new GameOrder;
+            $order->game_id = $game->id;
+            $order->user_id = $user->id;
+            $order->position = $position;
+            $order->save();
+        }
     }
 }

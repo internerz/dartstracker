@@ -21,4 +21,8 @@ class Game extends Model
     public function mode() {
         return $this->belongsTo(Mode::class);
     }
+
+    public function order() {
+        return $this->hasOne(GameOrder::class);
+    }
 }

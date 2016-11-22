@@ -34,4 +34,8 @@ class User extends Authenticatable
     public function points() {
         return $this->hasMany(Point::class);
     }
+
+    public function order() {
+        return $this->hasOne(GameOrder::class);
+    }
 }
