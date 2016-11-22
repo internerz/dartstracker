@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Game extends Model
 {
     protected $fillable = [
-        'mode', 'ruleset',
+        'mode', 'ruleset', 'number_of_legs_to_win',
     ];
 
     public function users() {

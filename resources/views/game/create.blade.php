@@ -31,8 +31,13 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="opponentSearch">Search for opponent</label>
-                                <input type="text" class="form-control" id="opponentSearch" name="opponent" placeholder="Name">
+                                <label for="numberOfLegsToWin">Number of legs to win</label>
+                                <input type="number" class="form-control" id="numberOfLegsToWin" name="legs" min="1" max="99" value="2">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="opponentSearch">Search for opponent (ID of a user)</label>
+                                <input type="number" class="form-control" id="opponentSearch" name="opponent" min="1" max="9999" value="2">
                             </div>
 
                             <button type="submit" class="btn btn-primary">Submit</button>
