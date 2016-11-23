@@ -2,7 +2,7 @@
 Darts Tracker ist eine Web-App, die es einem ermöglicht, Dart-Spiele zu notieren und Statistiken über seine Spiele zu verfolgen. Ziel ist es, sich mit verschiedenen, aktuell gebräuchlichen Technologien zu beschäftigen, darunter PHP, das MVC-Framework Laravel, Sass und Docker.
 
 ## Team
-Das Team besteht aus [Hendrik Jahnert](https://github.com/Ikke007) (hendrik.jahnert@haw-hamburg.de), [Tobias Schweisfurth](https://github.com/Arcraith) (tobias.schweisfurth@haw-hamburg.de) und [Benjamin Strilziw](https://github.com/internerz) (benjamin.strilziw@haw-hamburg.de). Tobias Schweisfurth agiert als Projektleiter. 
+Das Team besteht aus [Hendrik Jahnert](https://github.com/Ikke007) (hendrik.jahnert@haw-hamburg.de), [Tobias Schweisfurth](https://github.com/Arcraith) (tobias.schweisfurth@haw-hamburg.de) und [Benjamin Strilziw](https://github.com/internerz) (benjamin.strilziw@haw-hamburg.de). Benjamin Strilziw agiert als Projektleiter. 
 
 ## Zielplattformen
 Als Web-App läuft der Darts Tracker im Browser und damit auf allen Geräten, die einen grafischen Browser besitzen. Hauptsächlich ist es für User gedacht, die Smartphone oder Tablet Stift und Zettel vorziehen. Entsprechend ist die Web-App für Toucheingaben und kleine Displays optimiert. 
@@ -73,40 +73,3 @@ Im letzten Schritt werden die Statistiken eingebaut.
 
 ### Tasks mit Trello
 Die einzelnen Arbeitspakete und Aufgabe werden mit Trello erstellt und verwaltet und so den einzelnen Projektteilnehmern zugewiesen.
-
-## Routes
-###### GET: /
-Startseite, Login
-
-###### GET: /login
-Anzeige des Logins
-
-###### POST: /login
-Verarbeitung des Logins
-
-###### GET: /logout
-Logout, Weiterleitung auf /login mit Logout-Hinweis
-
-###### GET: /user
-Profil anzeigen
-
-###### GET: /users/create oder /register
-Registrierungsformular anzeigen
-
-###### POST: /users/create oder /register
-Registrierungsformular validieren, verarbeiten und Benutzer anlegen
-
-###### GET: /users/update
-Registrierungsformular mit aktuellen Daten zum Bearbeiten anzeigen
-
-###### POST: /users/update
-Formular validieren, verarbeiten und Benutzerdaten aktualisieren
-
-###### GET: /game
-Dartscheibe anzeigen
-
-###### POST: /game/create
-Neues Spiel tracken
-
-###### GET: /statistics
-Anzeige der Statistiken
