@@ -65,6 +65,11 @@
                                     <li>
                                         <a href="/game/create">Create game</a>
                                     </li>
+                                    @if (Auth::user()->admin == true)
+                                        <li>
+                                            <a href="/modes">Modes</a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();
