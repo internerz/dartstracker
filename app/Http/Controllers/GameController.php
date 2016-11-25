@@ -22,7 +22,7 @@ class GameController extends Controller
         $game = Game::with('users')->with('legs')->with('mode')->where('id', $game->id)->get()->first();
         // TODO: error handling when no game was found (e.g. a user entered a non-existing id)
 
-        $currentLeg = Game::find($game->id)->legs()->where('winner_user_id', null)->first();
+        $currentLeg = $game->getCurrentLeg();
 
         return view('game.view', compact('game', 'currentLeg'));
     }
@@ -69,19 +69,16 @@ class GameController extends Controller
         }
 
         $response = [
-            'nextPlayerId' => $this->getNextPlayer()->id,
-            'nextPlayerName' => $this->getNextPlayer()->name,
+            'nextPlayerId' => $leg->game->getNextPlayer()->id,
+            'nextPlayerName' => $leg->game->getNextPlayer()->name,
         ];
+
         return \Response::json(json_encode($response));
     }
 
     public function createLeg(Game $game) {
         $leg = new Leg;
         $game->legs()->save($leg);
-    }
-
-    private function getNextPlayer() {
-        return User::find(2);
     }
 
     private function setOrder(Game $game) {

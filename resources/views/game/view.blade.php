@@ -12,6 +12,8 @@
                         Ruleset: {{ $game->ruleset }}<br />
                         Number of legs to win: {{ $game->number_of_legs_to_win }}<br />
                         Current leg: {{ $game->legs->count() }}<br />
+                        Current player: {{ $game->getCurrentPlayer()->name }}<br />
+                        Next player: {{ $game->getNextPlayer() }}<br />
                         @if ($currentLeg)
                         Current leg ID: {{ $currentLeg->id }}<br />
                         @endif
@@ -104,7 +106,6 @@
                     },
                     success: function(response) {
                         console.log('response', JSON.parse(response));
-                        console.log('nextPlayerId', JSON.parse(response)['nextPlayerId']);
                         player = {
                             id: JSON.parse(response)['nextPlayerId'],
                             name: JSON.parse(response)['nextPlayerName']

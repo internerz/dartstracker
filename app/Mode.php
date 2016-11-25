@@ -9,6 +9,6 @@ class Mode extends Model
     public $timestamps = false;
 
     public function game() {
-        return $this->belongsTo(Game::class);
+        return $this->belongsToMany(Game::class);
     }
 }
