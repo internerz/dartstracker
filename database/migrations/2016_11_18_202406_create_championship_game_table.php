@@ -13,7 +13,7 @@ class CreateChampionshipGameTable extends Migration
      */
     public function up()
     {
-        Schema::create('champoionship_game', function (Blueprint $table) {
+        Schema::create('championship_game', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('championship_id')->unsigned();
             $table->foreign('championship_id')->references('id')->on('championships')->onDelete('cascade');
