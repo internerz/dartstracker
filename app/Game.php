@@ -79,7 +79,6 @@ class Game extends Model
         } else {
             $position = $currentPlayer->order->position + 1;
         }
-        var_dump(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
 
         return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
     }
