@@ -21,5 +21,10 @@ Route::get('/home', 'HomeController@index');
 Route::get('/game', 'GameController@index');
 Route::get('/game/create', 'GameController@create');
 Route::get('/game/{game}', 'GameController@view');
+Route::get('/modes', 'AdminController@modes');
 Route::post('/game', 'GameController@store');
 Route::post('/game/{game}', 'GameController@storePoints');
+Route::post('/modes', 'AdminController@storeMode');
+Route::delete('/modes', 'AdminController@deleteMode');
+
+

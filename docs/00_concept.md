@@ -2,7 +2,7 @@
 Darts Tracker ist eine Web-App, die es einem ermöglicht, Dart-Spiele zu notieren und Statistiken über seine Spiele zu verfolgen. Ziel ist es, sich mit verschiedenen, aktuell gebräuchlichen Technologien zu beschäftigen, darunter PHP, das MVC-Framework Laravel, Sass und Docker.
 
 ## Team
-Das Team besteht aus [Hendrik Jahnert](https://github.com/Ikke007) (hendrik.jahnert@haw-hamburg.de), [Tobias Schweisfurth](https://github.com/Arcraith) (tobias.schweisfurth@haw-hamburg.de) und [Benjamin Strilziw](https://github.com/internerz) (benjamin.strilziw@haw-hamburg.de). Benjamin Strilziw agiert als Projektleiter. 
+Das Team besteht aus [Hendrik Janert](https://github.com/Ikke007) (hendrik.janert@haw-hamburg.de), [Tobias Schweisfurth](https://github.com/Arcraith) (tobias.schweisfurth@haw-hamburg.de) und [Benjamin Strilziw](https://github.com/internerz) (benjamin.strilziw@haw-hamburg.de). Benjamin Strilziw agiert als Projektleiter. 
 
 ## Zielplattformen
 Als Web-App läuft der Darts Tracker im Browser und damit auf allen Geräten, die einen grafischen Browser besitzen. Hauptsächlich ist es für User gedacht, die Smartphone oder Tablet Stift und Zettel vorziehen. Entsprechend ist die Web-App für Toucheingaben und kleine Displays optimiert. 
