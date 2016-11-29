@@ -236,24 +236,8 @@
                 points['points'] = [];
                 var button = $('#submit');
                 var csrf_token = $('meta[name="csrf-token"]').attr('content');
+                var board = $('#board');
 
-                $('#points').find('a').click(function () {
-                    if ($(this).data('points') && points['points'].length < 3) {
-                        if ($(this).data('double')) {
-                            points['points'].push([$(this).data('points'), 2]);
-                        } else if ($(this).data('trriple')) {
-                            points['points'].push([$(this).data('points'), 3]);
-                        } else {
-                            points['points'].push([$(this).data('points'), 1]);
-                        }
-                    }
-
-                    if (points['points'].length == 3) {
-                        button.removeClass('disabled');
-                    }
-
-                    return false;
-                });
 
                 button.click(function () {
                     var data = JSON.stringify(points);
@@ -286,36 +270,60 @@
 
                 function updatePlayerStrings() {
                     $('#playerName').text(player.name);
-                }
-            });
-        </script>
+                };
 
-        <script type="text/javascript">
-            $(document).ready(function () {
-                var board = $('#board');
-                console.log("board", board);
-                var scoreEl = $('#score');
-                console.log(scoreEl);
-                var score = 0;
-                var targetScore = 0;
-                var targetScoreSelect = $('#targetScore');
+                function updateScore(el) {
 
-                targetScoreSelect.change(function () {
-                    if (parseInt(this.value) > 0) {
-                        targetScore = parseInt(this.value);
-                        score = targetScore;
-                        scoreEl.text(targetScore);
-                        $('#overlay').fadeOut();
+                    var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+                    if(points['points'].length < 3) {
+                        switch (scoreParameters[0]) {
+                            case "s":
+                                points['points'].push([scoreParameters[1], 1]);
+                                break;
+                            case "d":
+                                points['points'].push([scoreParameters[1], 2]);
+                                break;
+                            case "t":
+                                points['points'].push([scoreParameters[1], 3]);
+                                break;
+                            case "Bull":
+                                points['points'].push([scoreParameters[0], 1]);
+                                break;
+                            case "Outer":
+                                points['points'].push([scoreParameters[0], 1]);
+                                break;
+                            default:
+                                console.log("something bad happened");
+                        }
                     }
+
+                    if (points['points'].length == 3) {
+                        button.removeClass('disabled');
+                    }
+                }
+
+                board.find("#areas g").children().hover(
+                        function () {
+                            $(this).css("opacity", "0.5").css('cursor', 'pointer');
+                        },
+                        function () {
+                            $(this).css("opacity", "1");
+                        }
+                ).click(function () {
+                    updateScore($(this));
                 });
 
-                function getScore(el) {
+
+                /*
+                some helper function(s), maybe not needed
+                 */
+                function getScorePoints(el) {
                     var scoredPoints = 0;
                     var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
 
                     switch(scoreParameters[0]) {
                         case "s":
-                            scoredPoints = scoreParameters[1];
+                            scoredPoints = 1 * scoreParameters[1];
                             break;
                         case "d":
                             scoredPoints = 2 * scoreParameters[1];
@@ -336,22 +344,25 @@
                     return scoredPoints;
                 }
 
-                function updateScore(el) {
-
-                    console.log(getScore(el));
-                }
-
-                board.find("#areas g").children().hover(
-                        function () {
-                            $(this).css("opacity", "0.6").css('cursor', 'pointer');
-                        },
-                        function () {
-                            $(this).css("opacity", "1");
+                $('#points').find('a').click(function () {
+                    if ($(this).data('points') && points['points'].length < 3) {
+                        if ($(this).data('double')) {
+                            points['points'].push([$(this).data('points'), 2]);
+                        } else if ($(this).data('trriple')) {
+                            points['points'].push([$(this).data('points'), 3]);
+                        } else {
+                            points['points'].push([$(this).data('points'), 1]);
                         }
-                ).click(function () {
-                    updateScore($(this));
+                    }
+
+                    if (points['points'].length == 3) {
+                        button.removeClass('disabled');
+                    }
+
+                    return false;
                 });
             });
         </script>
+
     @endif
 @endsection
