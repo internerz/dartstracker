@@ -77,7 +77,7 @@
 
                         -->
                         <div class="dartboard-wrapper">
-                            <svg id="board" class="board"  version="1.1" viewBox="0 0 787 774" >
+                            <svg id="board" class="board" version="1.1" viewBox="0 0 787 774">
                                 <g id="areas">
                                     <g id="s">
                                         <path id="s19" fill="#F7E9CD"
@@ -275,7 +275,7 @@
                 function updateScore(el) {
 
                     var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
-                    if(points['points'].length < 3) {
+                    if (points['points'].length < 3) {
                         switch (scoreParameters[0]) {
                             case "s":
                                 points['points'].push([scoreParameters[1], 1]);
@@ -315,13 +315,13 @@
 
 
                 /*
-                some helper function(s), maybe not needed
+                 some helper function(s), maybe not needed
                  */
                 function getScorePoints(el) {
                     var scoredPoints = 0;
                     var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
 
-                    switch(scoreParameters[0]) {
+                    switch (scoreParameters[0]) {
                         case "s":
                             scoredPoints = 1 * scoreParameters[1];
                             break;
