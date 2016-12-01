@@ -36,8 +36,16 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="opponentSearch">Search for opponent (ID of a user)</label>
-                                <input type="number" class="form-control" id="opponentSearch" name="opponent" min="1" max="9999" value="2">
+                                <label for="opponentSearch">Search for opponent</label>
+                                <input type="text" class="form-control" id="opponentSearch">
+                                <input type="hidden" id="opponents" name="opponents">
+                            </div>
+
+                            <label>Opponents</label>
+                            <div class="list-group" id="opponentList">
+                                <a href="#" class="list-group-item hidden" title="Remove opponent">
+                                    <span class="name">Cras justo odio</span> <span class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span>
+                                </a>
                             </div>
 
                             <button type="submit" class="btn btn-primary">Submit</button>

@@ -42,12 +42,10 @@ class GameController extends Controller
         $game->number_of_legs_to_win = $request->get('legs');
         $game->save();
 
-        // TODO: replace with for loop
         // TODO: validate, check if user is existing
-        $game->users()->sync(array(
-            \Auth::user()->id,
-            $request->get('opponent'),
-        ));
+        $opponents = json_decode($request->get('opponents'));
+        $opponents[] = \Auth::user()->id;
+        $game->users()->sync($opponents);
 
         $this->createLeg($game);
         $this->setOrder($game);

@@ -1,8 +1,31 @@
+$(document).ready(function () {
+    var users = [];
+    var opponentList = $('#opponentList');
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
+    $('#opponentSearch').autocomplete({
+        source: '/user/find',
+        minLength: 1,
+        select: function (event, ui) {
+            if (users.indexOf(ui.item.id) == -1) {
+                users.push(ui.item.id);
 
-require('./bootstrap');
+                var element = opponentList.find('a.hidden').clone();
+                element
+                    .removeClass('hidden')
+                    .data('id', ui.item.id)
+                    .find('.name').text(ui.item.value);
+
+                element.click(function () {
+                    users.splice(users.indexOf(ui.item.id), 1);
+                    $(this).remove();
+                    return false;
+                });
+                element.appendTo(opponentList);
+            }
+        },
+        close: function () {
+            this.value = '';
+            $('#opponents').val(JSON.stringify(users));
+        }
+    });
+});
