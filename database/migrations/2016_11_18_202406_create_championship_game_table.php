@@ -29,6 +29,6 @@ class CreateChampionshipGameTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('champoionship_game');
+        Schema::dropIfExists('championship_game');
     }
 }

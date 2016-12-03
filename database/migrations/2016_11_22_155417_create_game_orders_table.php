@@ -19,7 +19,7 @@ class CreateGameOrdersTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('position')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('game_id')->references('id')->on('games');
+            $table->foreign('game_id')->references('id')->on('games')->onDelete('cascade');
         });
     }
 
@@ -30,6 +30,6 @@ class CreateGameOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('game_order');
+        Schema::dropIfExists('game_orders');
     }
 }
