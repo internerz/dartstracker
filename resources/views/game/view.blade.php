@@ -91,6 +91,11 @@
                         var button = $('#submit');
                         var csrf_token = $('meta[name="csrf-token"]').attr('content');
                         var board = $('#board');
+                        var bullseye = 50;
+                        var outer = 25;
+                        var singleMultiplier = 1;
+                        var doubleMultiplier = 2;
+                        var trippleMultiplier = 3;
 
 
                         button.click(function () {
@@ -133,23 +138,25 @@
                             if (points['points'].length < 3) {
                                 switch (scoreParameters[0]) {
                                     case "s":
-                                        points['points'].push([scoreParameters[1], 1]);
+                                        points['points'].push([scoreParameters[1], singleMultiplier]);
                                         break;
                                     case "d":
-                                        points['points'].push([scoreParameters[1], 2]);
+                                        points['points'].push([scoreParameters[1], doubleMultiplier]);
                                         break;
                                     case "t":
-                                        points['points'].push([scoreParameters[1], 3]);
+                                        points['points'].push([scoreParameters[1], trippleMultiplier]);
                                         break;
                                     case "Bull":
-                                        points['points'].push([scoreParameters[0], 1]);
+                                        points['points'].push([bullseye, singleMultiplier]);
                                         break;
                                     case "Outer":
-                                        points['points'].push([scoreParameters[0], 1]);
+                                        points['points'].push([outer, singleMultiplier]);
                                         break;
                                     default:
                                         console.log("something bad happened");
                                 }
+
+                                console.log(points['points']);
                             }
 
                             if (points['points'].length == 3) {
