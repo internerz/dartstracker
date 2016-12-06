@@ -70,7 +70,7 @@
                     <div class="panel-heading">Dartboard</div>
 
                     <div class="panel-body">
-                        {{svg_icon('dartboard')->inline()}}
+                        @include('game.dartboard')
                     </div>
                 </div>
             </div>
