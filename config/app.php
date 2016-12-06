@@ -1,5 +1,7 @@
 <?php
 
+use BladeSvg\BladeSvgServiceProvider;
+
 return [
 
     /*
@@ -162,6 +164,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        BladeSvg\BladeSvgServiceProvider::class,
 
         /*
          * Package Service Providers...
