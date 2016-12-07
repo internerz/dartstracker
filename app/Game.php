@@ -6,60 +6,81 @@ use Illuminate\Database\Eloquent\Model;
 
 class Game extends Model
 {
+
     protected $fillable = [
-        'mode', 'ruleset', 'number_of_legs_to_win',
+        'mode',
+        'ruleset',
+        'number_of_legs_to_win',
     ];
 
-    public function users() {
+
+    public function users()
+    {
         return $this->belongsToMany(User::class);
     }
 
-    public function legs() {
+
+    public function legs()
+    {
         return $this->hasMany(Leg::class);
     }
 
-    public function mode() {
+
+    public function mode()
+    {
         return $this->belongsTo(Mode::class);
     }
 
-    public function orders() {
+
+    public function orders()
+    {
         return $this->hasMany(GameOrder::class);
     }
+
 
     /**
      * @return \App\Leg
      */
-    public function getCurrentLeg() {
+    public function getCurrentLeg()
+    {
         return $this->legs()->where('winner_user_id', null)->first();
     }
+
 
     /**
      * @param \App\User $user
      */
-    public function setLegWinner(User $user) {
+    public function setLegWinner(User $user)
+    {
         $leg = $this->getCurrentLeg();
         $leg->winner_user_id = $user->id;
         $leg->save();
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasNextLeg() {
-        return $this->legs()->count() < $this->number_of_legs_to_win;
-    }
 
     /**
      * @return boolean
      */
-    public function hasPoints() {
+    public function hasNextLeg()
+    {
+        return $this->legs()->count() < $this->number_of_legs_to_win;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function hasPoints()
+    {
         return $this->getCurrentLeg()->points->count() > 0;
     }
+
 
     /**
      * @return \App\User
      */
-    public function getCurrentPlayer() {
+    public function getCurrentPlayer()
+    {
         if ($this->hasPoints()) {
             return User::find($this->legs->last()->points->last()->user_id);
         } else {
@@ -67,10 +88,12 @@ class Game extends Model
         }
     }
 
+
     /**
      * @return \App\User
      */
-    public function getNextPlayer() {
+    public function getNextPlayer()
+    {
         $playersInGame = GameOrder::where('game_id', $this->id)->count();
         $currentPlayer = $this->getCurrentPlayer();
 
@@ -80,6 +103,7 @@ class Game extends Model
             $position = $currentPlayer->order->where('game_id', $this->id)->first()->position + 1;
         }
 
-        return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
+        return User::find(GameOrder::where('game_id', $this->id)->where('position',
+                $position)->get()->first()->user_id);
     }
 }
