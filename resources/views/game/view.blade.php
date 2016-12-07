@@ -24,62 +24,30 @@
                 </div>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Round</div>
-
-                    <div class="panel-body">
-                        Active player: <span id="playerName">{{ $game->users->first()->name }}</span>
-                    </div>
-
                     <div class="panel-heading">Score</div>
 
                     @if ($currentLeg)
                         <div class="panel-body" id="points">
-                            @for ($i = 0; $i <= 21; $i++)
-                                @if ($i == 0)
-                                    <a href="#" data-points="{{ $i }}">{{ $i }}</a><br/>
-                                @elseif ($i < 21)
-                                    <a href="#" data-points="{{ $i }}">{{ $i }}</a><span> | <a href="#"
-                                                                                               data-points="{{ $i }}"
-                                                                                               data-double="1">{{ $i }}
-                                            Double</a> | <a href="#" data-points="{{ $i }}" data-triple="1">{{ $i }}
-                                            Triple</a></span><br/>
-                                @else
-                                    <a href="#" data-points="25">Bullseye</a> | <a href="#" data-points="25"
-                                                                                   data-double="1">Double Bullseye</a>
-                                    <br/><br/>
-                                @endif
-                            @endfor
+                            @include('game.dartboard')
 
-                            <form method="POST" action="/game/{{ $game->id }}">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="points" value="0"/>
-                                <input type="hidden" name="double" value="0"/>
-                                <input type="hidden" name="triple" value="0"/>
+                            <div class="row" id="currentScoreElement">
+                                <h2 id="score" class="score col-sm-12">
+                                    <span id="playerName">{{ $game->users->first()->name }}</span> darts:
+                                    <span id="playerScore">0</span>
+                                </h2>
+                            </div>
 
-                                <button type="submit" class="btn btn-primary disabled" id="submit">Submit</button>
-                            </form>
+                            <button type="submit" class="btn btn-primary disabled" id="submit">Submit</button>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Dartboard</div>
-
-                    <div class="panel-body">
-                        @include('game.dartboard')
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+@endsection
 
+@section('javascript')
     @if ($currentLeg)
-        <script type="text/javascript"
-                src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function () {
                         var points = {};
@@ -91,12 +59,18 @@
                         var button = $('#submit');
                         var csrf_token = $('meta[name="csrf-token"]').attr('content');
                         var board = $('#board');
+                        var currentScoreElement = $('#currentScoreElement');
+                        var playerNameElement = $('#playerName');
+                        var playerScoreElement = $('#playerScore');
+
+                        var startingScore = 0;
+                        var currentScore = startingScore;
+
                         var bullseye = 50;
                         var outer = 25;
                         var singleMultiplier = 1;
                         var doubleMultiplier = 2;
                         var trippleMultiplier = 3;
-
 
                         button.click(function () {
                             var data = JSON.stringify(points);
@@ -113,13 +87,15 @@
                                     points: data,
                                 },
                                 success: function (response) {
-                                    console.log('response', JSON.parse(response));
                                     player = {
                                         id: JSON.parse(response)['nextPlayerId'],
                                         name: JSON.parse(response)['nextPlayerName']
                                     };
 
+                                    removePointElements();
+                                    updateScoreElement(startingScore);
                                     updatePlayerStrings();
+                                    currentScore = 0;
                                 },
                                 dataType: 'json'
                             });
@@ -128,11 +104,10 @@
                         });
 
                         function updatePlayerStrings() {
-                            $('#playerName').text(player.name);
-                        };
+                            playerNameElement.text(player.name);
+                        }
 
                         function updateScore(el) {
-
                             var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
 
                             if (points['points'].length < 3) {
@@ -156,12 +131,26 @@
                                         console.log("something bad happened");
                                 }
 
-                                console.log(points['points']);
+                                addPointsElement(getScorePoints(el));
+                                currentScore = currentScore + getScorePoints(el);
+                                updateScoreElement(currentScore);
                             }
 
                             if (points['points'].length == 3) {
                                 button.removeClass('disabled');
                             }
+                        }
+
+                        function addPointsElement(points) {
+                            currentScoreElement.append('<div class="col-md-4">' + points + '</div>');
+                        }
+
+                        function updateScoreElement(score) {
+                            playerScoreElement.text(score);
+                        }
+
+                        function removePointElements() {
+                            currentScoreElement.find('div').remove();
                         }
 
                         board.find("#areas g").children().hover(
@@ -175,15 +164,12 @@
                             updateScore($(this));
                         });
 
-
                         /*
-
                          some helper function(s), maybe not needed
                          */
                         function getScorePoints(el) {
                             var scoredPoints = 0;
                             var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
-
 
                             switch (scoreParameters[0]) {
                                 case "s":
@@ -207,27 +193,8 @@
 
                             return scoredPoints;
                         }
-
-                        $('#points').find('a').click(function () {
-                            if ($(this).data('points') && points['points'].length < 3) {
-                                if ($(this).data('double')) {
-                                    points['points'].push([$(this).data('points'), 2]);
-                                } else if ($(this).data('trriple')) {
-                                    points['points'].push([$(this).data('points'), 3]);
-                                } else {
-                                    points['points'].push([$(this).data('points'), 1]);
-                                }
-                            }
-
-                            if (points['points'].length == 3) {
-                                button.removeClass('disabled');
-                            }
-
-                            return false;
-                        });
                     }
             );
         </script>
-
     @endif
 @endsection

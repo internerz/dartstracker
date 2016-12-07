@@ -99,5 +99,6 @@
 
     <!-- Scripts -->
     <script src="/js/scripts.js"></script>
+    @yield('javascript')
 </body>
 </html>
