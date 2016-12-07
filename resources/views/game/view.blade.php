@@ -26,13 +26,22 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Score: <span id="playerPoints"></span></div>
 
+                    <div class="panel-body">
+                        @foreach ($game->users as $user)
+                            <div class="col-md-{{ 12/count($game->users) }}">
+                                {{ $user->name }}<br />
+                                <span class="score">501</span>
+                            </div>
+                        @endforeach
+                    </div>
+
                     @if ($currentLeg)
                         <div class="panel-body" id="points">
                             @include('game.dartboard')
 
                             <div class="row" id="currentScoreElement">
                                 <h2 id="score" class="score col-sm-12">
-                                    <span id="playerName">{{ $game->users->first()->name }}</span> darts:
+                                    <span id="playerName">{{ $game->getCurrentPlayer()->name }}</span> darts:
                                     <span id="playerScore">0</span>
                                 </h2>
                             </div>
@@ -93,7 +102,6 @@
                                         name: JSON.parse(response)['nextPlayerName'],
                                         points: JSON.parse(response)['nextPlayerPoints']
                                     };
-                                    console.log(player);
                                     removePointElements();
                                     updateScoreElement(startingScore);
                                     updatePlayerStrings();
