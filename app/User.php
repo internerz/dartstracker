@@ -36,6 +36,6 @@ class User extends Authenticatable
     }
 
     public function order() {
-        return $this->hasOne(GameOrder::class);
+        return $this->hasMany(GameOrder::class);
     }
 }

@@ -74,10 +74,10 @@ class Game extends Model
         $playersInGame = GameOrder::where('game_id', $this->id)->count();
         $currentPlayer = $this->getCurrentPlayer();
 
-        if ($currentPlayer->order->position + 1 == $playersInGame) {
+        if ($currentPlayer->order->where('game_id', $this->id)->first()->position + 1 == $playersInGame) {
             $position = 0;
         } else {
-            $position = $currentPlayer->order->position + 1;
+            $position = $currentPlayer->order->where('game_id', $this->id)->first()->position + 1;
         }
 
         return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
