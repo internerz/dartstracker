@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Score</div>
+                    <div class="panel-heading">Score: <span id="playerPoints"></span></div>
 
                     @if ($currentLeg)
                         <div class="panel-body" id="points">
@@ -53,6 +53,7 @@
                         var player = {
                             id: "{{ \Auth::user()->id }}",
                             name: "{{ \Auth::user()->name }}",
+                            points: ""
                         };
                         var points = [];
                         var button = $('#submit');
@@ -61,6 +62,7 @@
                         var currentScoreElement = $('#currentScoreElement');
                         var playerNameElement = $('#playerName');
                         var playerScoreElement = $('#playerScore');
+                        var playerPointsElement = $('#playerPoints');
 
                         var startingScore = 0;
                         var currentScore = startingScore;
@@ -88,12 +90,14 @@
                                 success: function (response) {
                                     player = {
                                         id: JSON.parse(response)['nextPlayerId'],
-                                        name: JSON.parse(response)['nextPlayerName']
+                                        name: JSON.parse(response)['nextPlayerName'],
+                                        points: JSON.parse(response)['nextPlayerPoints']
                                     };
-
+                                    console.log(player);
                                     removePointElements();
                                     updateScoreElement(startingScore);
                                     updatePlayerStrings();
+                                    updatePlayerPoints();
                                     currentScore = 0;
                                 },
                                 dataType: 'json'
@@ -104,6 +108,10 @@
 
                         function updatePlayerStrings() {
                             playerNameElement.text(player.name);
+                        }
+
+                        function updatePlayerPoints() {
+                            playerPointsElement.text(player.points);
                         }
 
                         function updateScore(el) {

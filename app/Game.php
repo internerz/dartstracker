@@ -79,7 +79,16 @@ class Game extends Model
         } else {
             $position = $currentPlayer->order->position + 1;
         }
-
         return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
+    }
+
+    public function getCurrentPointsOfPlayer(User $user) {
+        $points = Point::where('user_id', $user->id)->where('leg_id', $this->getCurrentLeg()->id)->get()->map(function($item){
+            return $item->points * $item->multiplier;
+        })->sum(function($value){
+            return $value;
+        });
+
+        return $points;
     }
 }
