@@ -50,12 +50,11 @@
     @if ($currentLeg)
         <script type="text/javascript">
             $(document).ready(function () {
-                        var points = {};
                         var player = {
                             id: "{{ \Auth::user()->id }}",
                             name: "{{ \Auth::user()->name }}",
                         };
-                        points['points'] = [];
+                        var points = [];
                         var button = $('#submit');
                         var csrf_token = $('meta[name="csrf-token"]').attr('content');
                         var board = $('#board');
@@ -75,7 +74,7 @@
                         button.click(function () {
                             var data = JSON.stringify(points);
                             button.prop('disabled', true);
-                            points['points'] = [];
+                            points = [];
 
                             $.ajax({
                                 type: "POST",
@@ -110,22 +109,22 @@
                         function updateScore(el) {
                             var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
 
-                            if (points['points'].length < 3) {
+                            if (points.length < 3) {
                                 switch (scoreParameters[0]) {
                                     case "s":
-                                        points['points'].push([scoreParameters[1], singleMultiplier]);
+                                        points.push([scoreParameters[1], singleMultiplier]);
                                         break;
                                     case "d":
-                                        points['points'].push([scoreParameters[1], doubleMultiplier]);
+                                        points.push([scoreParameters[1], doubleMultiplier]);
                                         break;
                                     case "t":
-                                        points['points'].push([scoreParameters[1], trippleMultiplier]);
+                                        points.push([scoreParameters[1], trippleMultiplier]);
                                         break;
                                     case "Bull":
-                                        points['points'].push([bullseye, singleMultiplier]);
+                                        points.push([bullseye, singleMultiplier]);
                                         break;
                                     case "Outer":
-                                        points['points'].push([outer, singleMultiplier]);
+                                        points.push([outer, singleMultiplier]);
                                         break;
                                     default:
                                         console.log("something bad happened");
@@ -136,7 +135,7 @@
                                 updateScoreElement(currentScore);
                             }
 
-                            if (points['points'].length == 3) {
+                            if (points.length == 3) {
                                 button.prop('disabled', false);
                             }
                         }
@@ -148,11 +147,11 @@
 
                             lastScoreElement.find('span').click(function () {
                                 currentScore = currentScore - score;
-                                points['points'].splice(currentScoreElement.find('div').index($(this).parent()), 1);
+                                points.splice(currentScoreElement.find('div').index($(this).parent()), 1);
                                 updateScoreElement(currentScore);
                                 lastScoreElement.remove();
 
-                                if (points['points'].length < 3) {
+                                if (points.length < 3) {
                                     button.prop('disabled', true);
                                 }
                             });

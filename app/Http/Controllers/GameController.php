@@ -56,7 +56,7 @@ class GameController extends Controller
     public function storePoints(Request $request) {
         // TODO: verfiy user data
         $leg = Leg::find($request->get('leg'));
-        $pointsArray = json_decode($request->get('points'))->points;
+        $pointsArray = json_decode($request->get('points'));
 
         foreach ($pointsArray as $data) {
             $point = new Point;
