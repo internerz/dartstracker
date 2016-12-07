@@ -37,7 +37,7 @@
                                 </h2>
                             </div>
 
-                            <button type="submit" class="btn btn-primary disabled" id="submit">Submit</button>
+                            <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
                         </div>
                     @endif
                 </div>
@@ -74,7 +74,7 @@
 
                         button.click(function () {
                             var data = JSON.stringify(points);
-                            button.addClass('disabled');
+                            button.prop('disabled', true);
                             points['points'] = [];
 
                             $.ajax({
@@ -137,12 +137,25 @@
                             }
 
                             if (points['points'].length == 3) {
-                                button.removeClass('disabled');
+                                button.prop('disabled', false);
                             }
                         }
 
-                        function addPointsElement(points) {
-                            currentScoreElement.append('<div class="col-md-4">' + points + '</div>');
+                        function addPointsElement(score) {
+                            currentScoreElement.append('<div class="col-md-4">'
+                                    + score + '<span class="glyphicon glyphicon-remove"></span></div>');
+                            var lastScoreElement = currentScoreElement.find('div').last();
+
+                            lastScoreElement.find('span').click(function () {
+                                currentScore = currentScore - score;
+                                points['points'].splice(currentScoreElement.find('div').index($(this).parent()), 1);
+                                updateScoreElement(currentScore);
+                                lastScoreElement.remove();
+
+                                if (points['points'].length < 3) {
+                                    button.prop('disabled', true);
+                                }
+                            });
                         }
 
                         function updateScoreElement(score) {
