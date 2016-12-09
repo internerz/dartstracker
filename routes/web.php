@@ -23,9 +23,12 @@ Route::get('/game/create', 'GameController@create');
 Route::get('/game/{game}', 'GameController@view');
 Route::get('/modes', 'AdminController@modes');
 Route::get('/user/find', 'UserController@find');
+Route::get('/friends', 'FriendController@index');
 Route::post('/game', 'GameController@store');
 Route::post('/game/{game}', 'GameController@storePoints');
 Route::post('/modes', 'AdminController@storeMode');
+Route::post('/friends', 'FriendController@store');
 Route::delete('/modes', 'AdminController@deleteMode');
+Route::delete('/friends', 'FriendController@deleteFriend');
 
 
