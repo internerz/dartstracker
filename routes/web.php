@@ -11,13 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/', 'HomeController@index');
 Route::get('/game', 'GameController@index');
 Route::get('/game/create', 'GameController@create');
 Route::get('/game/{game}', 'GameController@view');

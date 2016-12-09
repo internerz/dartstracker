@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
     use Notifiable;
 
     /**
@@ -15,7 +16,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -24,19 +27,26 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
-    public function games() {
+
+    public function games()
+    {
         return $this->belongsToMany(Game::class);
     }
 
-    public function points() {
+
+    public function points()
+    {
         return $this->hasMany(Point::class);
     }
 
-    public function order() {
-        return $this->hasOne(GameOrder::class);
+
+    public function order()
+    {
+        return $this->hasMany(GameOrder::class);
     }
 
     public function friends() {
