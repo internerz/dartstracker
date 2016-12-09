@@ -24,7 +24,7 @@
                 </div>
 
                 <div class="panel panel-default">
-                    <div class="panel-heading">Score: <span id="playerPoints"></span></div>
+                    <div class="panel-heading">Score</div>
 
                     <div class="panel-body" id="scoreBoard">
                         @foreach ($game->users as $user)
@@ -71,7 +71,6 @@
                         var currentScoreElement = $('#currentScoreElement');
                         var playerNameElement = $('#playerName');
                         var playerScoreElement = $('#playerScore');
-                        var playerPointsElement = $('#playerPoints');
                         var scoreBoard = $('#scoreBoard');
 
                         var startingScore = 0;
@@ -127,7 +126,6 @@
                                 var field = scoreBoard.find('#id-' + key);
                                 field.text(player.points[key]);
                             }
-                            playerPointsElement.text(player.points);
                         }
 
                         function updateScore(el) {
