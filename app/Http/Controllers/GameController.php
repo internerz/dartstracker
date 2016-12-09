@@ -23,7 +23,7 @@ class GameController extends Controller
 
     public function view(Game $game)
     {
-        $game = Game::with('users')->with('legs')->with('mode')->where('id', $game->id)->get()->first();
+        $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
         // TODO: error handling when no game was found (e.g. a user entered a non-existing id)
 
         $currentLeg = $game->getCurrentLeg();
