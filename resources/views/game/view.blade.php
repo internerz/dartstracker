@@ -26,11 +26,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Score: <span id="playerPoints"></span></div>
 
-                    <div class="panel-body">
+                    <div class="panel-body" id="scoreBoard">
                         @foreach ($game->users as $user)
                             <div class="col-md-{{ 12/count($game->users) }}">
                                 {{ $user->name }}<br />
-                                <span class="score">501</span>
+                                <span class="score" id="id-{{$user->id}}">501 : {{$game->getCurrentPointsOfPlayer($user)}}</span>
                             </div>
                         @endforeach
                     </div>
@@ -72,6 +72,7 @@
                         var playerNameElement = $('#playerName');
                         var playerScoreElement = $('#playerScore');
                         var playerPointsElement = $('#playerPoints');
+                        var scoreBoard = $('#scoreBoard');
 
                         var startingScore = 0;
                         var currentScore = startingScore;
@@ -100,8 +101,10 @@
                                     player = {
                                         id: JSON.parse(response)['nextPlayerId'],
                                         name: JSON.parse(response)['nextPlayerName'],
-                                        points: JSON.parse(response)['nextPlayerPoints']
+                                        points: JSON.parse(response)['playerPoints']
                                     };
+
+                                    console.log(player['points']);
                                     removePointElements();
                                     updateScoreElement(startingScore);
                                     updatePlayerStrings();
@@ -119,6 +122,11 @@
                         }
 
                         function updatePlayerPoints() {
+
+                            for(var key in player.points) {
+                                var field = scoreBoard.find('#id-' + key);
+                                field.text(player.points[key]);
+                            }
                             playerPointsElement.text(player.points);
                         }
 

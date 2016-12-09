@@ -79,7 +79,7 @@ class GameController extends Controller
         $response = [
             'nextPlayerId'   => $leg->game->getNextPlayer()->id,
             'nextPlayerName' => $leg->game->getNextPlayer()->name,
-            'nextPlayerPoints' => $leg->game->getCurrentPointsOfPlayer($leg->game->getNextPlayer())
+            'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer()
         ];
 
         return \Response::json(json_encode($response));
