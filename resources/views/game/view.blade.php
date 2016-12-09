@@ -29,7 +29,7 @@
                     <div class="panel-body">
                         @foreach ($game->users as $user)
                             <div class="col-md-{{ 12/count($game->users) }}">
-                                {{ $user->name }}<br />
+                                <a href="/user/{{ $user->id }}">{{ $user->name }}</a><br />
                                 <span class="score">501</span>
                             </div>
                         @endforeach

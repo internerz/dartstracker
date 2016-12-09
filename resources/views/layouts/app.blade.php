@@ -79,6 +79,9 @@
                                         </li>
                                     @endif
                                     <li>
+                                        <a href="/profile">Profile</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
