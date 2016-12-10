@@ -59,6 +59,95 @@
     @if ($currentLeg)
         <script type="text/javascript">
             $(document).ready(function () {
+                        var Game = function(players) {
+                            var self = this;
+                            this.players = [];
+                            this.states = [new DoubleIn(this), new DoubleOut(this)];
+                            players.forEach(function(element, index, array) {
+                                self.players.push(new Player(element, self.states));
+                            });
+
+                            this.currentPlayer = this.players[1];
+
+                            this.setCurrentPlayer = function(player) {
+                                // aktueller Spieler muss nach der Reihenfolge gesetzt werden
+                                self.currentPlayer = player;
+                            };
+
+                            this.gameOver = function() {
+                                // set gameOver
+                            }
+
+                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
+
+                            this.setCurrentPlayer(this.players[0]);
+
+                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
+
+                            // handle Input
+                            // irgendwie path.click -> currentPlayer.currentState.handleInput()
+                        }
+
+                        var Player = function(player, states){
+                            var self = this;
+                            this.id = player.id;
+                            this.name = player.name;
+                            this.states = states;       // überflüssig? einfach game.states?
+                            this.statesIndex = 0;
+                            this.currentState = this.states[self.statesIndex];
+
+                            this.nextState = function() {
+                                self.statesIndex = self.statesIndex++;
+                                self.currentState = self.states[self.statesIndex];
+                            }
+                        }
+
+                        var DoubleIn = function(game){
+                            this.game = game;
+
+                            this.handleInput = function() {
+                                // add the points according to the state
+
+                                // certain condition -> player.nextState()
+                            }
+                        }
+
+                        var DoubleOut = function(game) {
+                            this.game = game;
+
+                            this.handleInput = function() {
+                                // add the points according to the state
+
+                                // certain condition -> player.nextState()
+                            }
+                        }
+
+                        var Playing = function(game) {
+                            this.game = game;
+
+                            this.handleInput = function() {
+                                // add the points according to the state
+
+                                // certain condition -> player.nextState()
+                            }
+                        }
+
+                        var gameInfo = {!! json_encode($game) !!};
+                        //console.log("game_info: ", game);
+                        var players = [];
+
+                        gameInfo.users.forEach(function(element, index, array){
+                            players.push(element);
+                        });
+
+                        console.log(players);
+
+
+                        var game = new Game(players);
+
+                        console.log(game);
+
+
                         var player = {
                             id: "{{ \Auth::user()->id }}",
                             name: "{{ \Auth::user()->name }}",
@@ -103,7 +192,6 @@
                                         points: JSON.parse(response)['playerPoints']
                                     };
 
-                                    console.log(player['points']);
                                     removePointElements();
                                     updateScoreElement(startingScore);
                                     updatePlayerStrings();
@@ -116,6 +204,48 @@
                             return false;
                         });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        // update functions
                         function updatePlayerStrings() {
                             playerNameElement.text(player.name);
                         }
