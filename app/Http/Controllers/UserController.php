@@ -39,8 +39,9 @@ class UserController extends Controller
     {
         if (\Auth::check()) {
             $user = \Auth::user();
+            $friends = User::whereIn('id', $user->friends->pluck('friends_id')->toArray())->get();
 
-            return view('user.show', compact('user'));
+            return view('user.show', compact('user', 'friends'));
         } else {
             abort(403, 'Unauthorized action.');
         }
