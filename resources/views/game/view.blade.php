@@ -88,17 +88,18 @@
 
                             this.currentPlayer = this.players[1];
 
-                            this.setCurrentPlayer = function (player) {
-                                // TODO: aktueller Spieler muss nach der Reihenfolge gesetzt werden
-                                self.currentPlayer = player;
+                            this.setCurrentPlayer = function (playerObject) {
+//                                console.log("ob", playerObject)
+                                var currentPlayer = self.players.find(function (player) {
+                                    return player.id == playerObject.id;
+                                });
+
+                                self.currentPlayer = currentPlayer;
                             };
 
                             this.gameOver = function () {
                                 // set gameOver
                             }
-
-                            // TODO: setting the currentplayer here is wrong
-                            this.setCurrentPlayer(this.players[0]);
 
                             // handle Input
                             this.handleInput = function (el) {
@@ -216,6 +217,9 @@
                         });
 
                         var game = new Game(players);
+
+                        var currentPlayer = {!! json_encode($game->getCurrentPlayer()) !!};
+                        game.setCurrentPlayer(currentPlayer);
 
                         var player = {
                             id: "{{ \Auth::user()->id }}",
