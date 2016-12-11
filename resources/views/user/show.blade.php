@@ -10,11 +10,30 @@
                         <a href="/profile/edit"><span class="glyphicon glyphicon-edit"></span></a>
                     @elseif (\Auth::check())
                         @if ($areFriends)
-                            <a href="/friend/remove/{{ $user->id }}"><span class="glyphicon glyphicon-user"></span><span
-                                        class="glyphicon glyphicon-minus"></span></a>
+                            <a href="{{ url('/friends') }}"
+                               onclick="event.preventDefault();
+                                       document.getElementById('deleteFriendForm').submit();">
+                                <span class="glyphicon glyphicon-user"></span><span
+                                        class="glyphicon glyphicon-minus"></span>
+                            </a>
+
+                            <form method="POST" action="/friends" id="deleteFriendForm">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <input type="hidden" name="friend_id" value="{{ $user->id }}">
+                            </form>
                         @else
-                            <a href="/friend/add/{{ $user->id }}"><span class="glyphicon glyphicon-user"></span><span
-                                        class="glyphicon glyphicon-plus"></span></a>
+                            <a href="{{ url('/friends') }}"
+                               onclick="event.preventDefault();
+                                       document.getElementById('addFriendForm').submit();">
+                                <span class="glyphicon glyphicon-user"></span><span
+                                        class="glyphicon glyphicon-plus"></span>
+                            </a>
+
+                            <form method="POST" action="/friends" id="addFriendForm">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="friend_id" value="{{ $user->id }}">
+                            </form>
                         @endif
                     @endif
                 </h3>

@@ -29,7 +29,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user = User::with('friends')->find($user->id);
-        $areFriends = !is_null(Friend::where('user_id', \Auth::user()->id)->where('friends_id', $user->id)->first());
+        $areFriends = in_array(\Auth::id(), $user->friends()->pluck('friend_id')->toArray());
 
         return view('user.show', compact('user', 'areFriends'));
     }
@@ -39,7 +39,6 @@ class UserController extends Controller
     {
         if (\Auth::check()) {
             $user = \Auth::user();
-            //$friends = User::whereIn('id', $user->friends->pluck('friends_id')->toArray())->get();
             $friends = $user->friends()->get();
 
             return view('user.show', compact('user', 'friends'));
