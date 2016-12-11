@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Friend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
@@ -13,16 +12,12 @@ class FriendController extends Controller
 
     public function index()
     {
-        $friends = Friend::where('user_id', Auth::id())->get();
-        $friends_names = [];
-        foreach ($friends as $friend) {
-            array_push($friends_names, User::find($friend->friends_id)->name);
-        }
+        $friends = Auth::user()->friends()->get();
 
-        return view('friends', compact('friends', 'friends_names'));
+        return view('friends', compact('friends'));
     }
 
-
+/*
     public function add(User $user)
     {
         if (Auth::check()) {
@@ -54,24 +49,25 @@ class FriendController extends Controller
 
         return back();
     }
+*/
 
-
-    public function store(Request $request)
+    public function add(Request $request)
     {
-        if (Auth::check()) {
-            $friend = new Friend();
-            $friend->user_id = Auth::id();
-            $friend->friends_id = $request->get('friend_id');
-            $friend->save();
-        }
+        $user = Auth::user();
+        $user->friends()->attach($request->friend_id);   // add friend
+        $friend = User::find($request->friend_id);       // find your friend, and...
+        $friend->friends()->attach($user->id);  // add yourself, too
 
         return back();
     }
 
 
-    public function deleteFriend(Request $request)
+    public function remove(Request $request)
     {
-        Friend::where('friends_id', $request->friends_id)->delete();
+        $user = Auth::user();
+        $user->friends()->detach($request->friend_id);   // remove friend
+        $friend = User::find($request->friend_id);       // find your friend, and...
+        $friend->friends()->detach($user->id);  // remove yourself, too
 
         return back();
     }

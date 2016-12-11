@@ -49,7 +49,10 @@ class User extends Authenticatable
         return $this->hasMany(GameOrder::class);
     }
 
-    public function friends() {
-        return $this->hasMany(Friend::class);
+
+    public function friends()
+    {
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id');
     }
+
 }

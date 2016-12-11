@@ -39,7 +39,8 @@ class UserController extends Controller
     {
         if (\Auth::check()) {
             $user = \Auth::user();
-            $friends = User::whereIn('id', $user->friends->pluck('friends_id')->toArray())->get();
+            //$friends = User::whereIn('id', $user->friends->pluck('friends_id')->toArray())->get();
+            $friends = $user->friends()->get();
 
             return view('user.show', compact('user', 'friends'));
         } else {

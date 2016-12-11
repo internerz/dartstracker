@@ -10,25 +10,26 @@
 
                             @if (count($friends) > 0)
                                 <ul class="list-group">
-                                    @for ($i = 0; $i < sizeof($friends); $i++)
+
+                                    @foreach($friends as $friend)
 
                                         <li class="list-group-item" >
 
-                                            {{ $friends_names[$i] }}
+                                            {{ $friend->name }}
 
-                                            <a href="{{ url('/friends') }}"
-                                               onclick="event.preventDefault();
-                                                       document.getElementById('delete{{$friends[$i]->friends_id}}').submit();">
-                                                <span type="" class="glyphicon glyphicon-remove"></span>
-                                            </a>
+                                             <a href="{{ url('/friends') }}"
+                                                onclick="event.preventDefault();
+                                                        document.getElementById('delete{{$friend->id}}').submit();">
+                                                 <span type="" class="glyphicon glyphicon-remove"></span>
+                                             </a>
 
-                                            <form method="POST" action="/friends" id="delete{{$friends[$i]->friends_id}}">
-                                                {{ csrf_field() }}
-                                                {{ method_field('DELETE') }}
-                                                <input type="hidden" name="friends_id" value="{{$friends[$i]->friends_id}}">
-                                            </form>
-                                        </li>
-                                            @endfor
+                                             <form method="POST" action="/friends" id="delete{{$friend->id}}">
+                                                 {{ csrf_field() }}
+                                                 {{ method_field('DELETE') }}
+                                                 <input type="hidden" name="friend_id" value="{{$friend->id}}">
+                                             </form>
+                                         </li>
+                                    @endforeach
                                 </ul>
                             @endif
 

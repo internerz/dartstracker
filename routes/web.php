@@ -28,9 +28,9 @@ Route::get('/profile/edit', 'UserController@edit');
 Route::post('/game', 'GameController@store');
 Route::post('/game/{game}', 'GameController@storePoints');
 Route::post('/modes', 'AdminController@storeMode');
-Route::post('/friends', 'FriendController@store');
+Route::post('/friends', 'FriendController@add');
 Route::put('/profile', 'UserController@store');
 Route::delete('/modes', 'AdminController@deleteMode');
-Route::delete('/friends', 'FriendController@deleteFriend');
+Route::delete('/friends', 'FriendController@remove');
 
 
