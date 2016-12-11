@@ -42,6 +42,15 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add Friend</button>
                             </form>
+
+                            @if(count($errors))
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{$error}}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+
                         </div>
                     </div>
                 </div>

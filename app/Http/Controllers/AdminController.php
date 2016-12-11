@@ -16,6 +16,10 @@ class AdminController extends Controller
 
     public function storeMode(Request $request) {
 
+        $this->validate($request, [
+            'name' => 'required|unique:modes'
+        ]);
+
         $mode = new Mode();
         $mode->name = $request->get('name');
         $mode->save();

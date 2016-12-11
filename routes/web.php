@@ -33,4 +33,3 @@ Route::put('/profile', 'UserController@store');
 Route::delete('/modes', 'AdminController@deleteMode');
 Route::delete('/friends', 'FriendController@remove');
 
-
