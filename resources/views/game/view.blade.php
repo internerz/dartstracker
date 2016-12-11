@@ -152,9 +152,9 @@
                                         default:
                                             console.log("something bad happened");
                                     }
-                                }
 
-                                updateGui(el);
+                                    updateGui(el);
+                                }
 
                                 if (points.length == 3) {
                                     button.prop('disabled', false);
@@ -188,9 +188,9 @@
                                         default:
                                             console.log("something bad happened");
                                     }
-                                }
 
-                                updateGui(el);
+                                    updateGui(el);
+                                }
 
                                 if (points.length == 3) {
                                     button.prop('disabled', false);
