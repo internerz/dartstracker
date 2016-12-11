@@ -70,7 +70,7 @@
                             this.currentPlayer = this.players[1];
 
                             this.setCurrentPlayer = function(player) {
-                                // aktueller Spieler muss nach der Reihenfolge gesetzt werden
+                                // TODO: aktueller Spieler muss nach der Reihenfolge gesetzt werden
                                 self.currentPlayer = player;
                             };
 
@@ -78,47 +78,110 @@
                                 // set gameOver
                             }
 
-                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
+//                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
 
                             this.setCurrentPlayer(this.players[0]);
 
-                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
+//                            console.log("what to do", this.currentPlayer, this.currentPlayer.currentState);
 
                             // handle Input
-                            // irgendwie path.click -> currentPlayer.currentState.handleInput()
+                            this.handleInput = function(el) {
+                                console.log(this.currentPlayer.currentState);
+                                // gets Input and deals with it per currentplayer and the state he's currently in
+                                this.currentPlayer.currentState.handleInput(el);
+                            }
                         }
 
                         var Player = function(player, states){
                             var self = this;
                             this.id = player.id;
                             this.name = player.name;
+                            this.points = 0;
                             this.states = states;       // überflüssig? einfach game.states?
                             this.statesIndex = 0;
                             this.currentState = this.states[self.statesIndex];
 
                             this.nextState = function() {
-                                self.statesIndex = self.statesIndex++;
+                                // TODO: not increment statesIndex but set states to a specific state --> no state ordering
+
+                                self.statesIndex++;
                                 self.currentState = self.states[self.statesIndex];
+                                console.log("state change", self.statesIndex, self.currentState);
                             }
                         }
 
                         var DoubleIn = function(game){
                             this.game = game;
 
-                            this.handleInput = function() {
-                                // add the points according to the state
+                            this.handleInput = function(el) {
+//                                console.log("DoubleIn", el.attr('id'));
 
-                                // certain condition -> player.nextState()
+                                var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+
+                                if (points.length < 3) {
+                                    switch (scoreParameters[0]) {
+                                        case "s":
+                                            points.push([0, singleMultiplier]);
+                                            break;
+                                        case "d":
+                                            points.push([scoreParameters[1], doubleMultiplier]);
+                                            game.currentPlayer.nextState();
+                                            break;
+                                        case "t":
+                                            points.push([0, trippleMultiplier]);
+                                            break;
+                                        case "Bull":
+                                            points.push([0, singleMultiplier]);
+                                            break;
+                                        case "Outer":
+                                            points.push([0, singleMultiplier]);
+                                            break;
+                                        default:
+                                            console.log("something bad happened");
+                                    }
+                                }
+
+                                updateGui(el);
+
+                                if (points.length == 3) {
+                                    button.prop('disabled', false);
+                                }
                             }
                         }
 
                         var DoubleOut = function(game) {
                             this.game = game;
 
-                            this.handleInput = function() {
-                                // add the points according to the state
+                            this.handleInput = function(el) {
+                                var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
 
-                                // certain condition -> player.nextState()
+                                if (points.length < 3) {
+                                    switch (scoreParameters[0]) {
+                                        case "s":
+                                            points.push([scoreParameters[1], singleMultiplier]);
+                                            break;
+                                        case "d":
+                                            points.push([scoreParameters[1], doubleMultiplier]);
+                                            break;
+                                        case "t":
+                                            points.push([scoreParameters[1], trippleMultiplier]);
+                                            break;
+                                        case "Bull":
+                                            points.push([bullseye, singleMultiplier]);
+                                            break;
+                                        case "Outer":
+                                            points.push([outer, singleMultiplier]);
+                                            break;
+                                        default:
+                                            console.log("something bad happened");
+                                    }
+                                }
+
+                                updateGui(el);
+
+                                if (points.length == 3) {
+                                    button.prop('disabled', false);
+                                }
                             }
                         }
 
@@ -133,20 +196,14 @@
                         }
 
                         var gameInfo = {!! json_encode($game) !!};
-                        //console.log("game_info: ", game);
+
                         var players = [];
 
                         gameInfo.users.forEach(function(element, index, array){
                             players.push(element);
                         });
 
-                        console.log(players);
-
-
                         var game = new Game(players);
-
-                        console.log(game);
-
 
                         var player = {
                             id: "{{ \Auth::user()->id }}",
@@ -181,16 +238,30 @@
                                 url: window.location.href.split('#')[0],
                                 data: {
                                     _token: csrf_token,
-                                    user: player.id,
+                                    user: game.currentPlayer.id,
                                     leg: "{{ $currentLeg->id }}",
                                     points: data,
                                 },
                                 success: function (response) {
-                                    player = {
-                                        id: JSON.parse(response)['nextPlayerId'],
-                                        name: JSON.parse(response)['nextPlayerName'],
-                                        points: JSON.parse(response)['playerPoints']
-                                    };
+//                                    player = {
+//                                        id: JSON.parse(response)['nextPlayerId'],
+//                                        name: JSON.parse(response)['nextPlayerName'],
+//                                        points: JSON.parse(response)['playerPoints']
+//                                    };
+                                    var playerPoints = JSON.parse(response)['playerPoints'];
+
+                                    for(var playerId in playerPoints) {
+                                        var player = game.players.find(function(player){
+                                           return player.id == playerId;
+                                        });
+                                        player.points = playerPoints[playerId];
+                                    }
+
+                                    game.players.forEach(function(element, index, array){
+                                        if(element.id == JSON.parse(response)['nextPlayerId']){
+                                            game.setCurrentPlayer(element);
+                                        }
+                                    });
 
                                     removePointElements();
                                     updateScoreElement(startingScore);
@@ -204,95 +275,38 @@
                             return false;
                         });
 
+                        function updateGui(el){
+                            addPointsElement(getScorePoints(el));
+                            currentScore = currentScore + getScorePoints(el);
+                            updateScoreElement(currentScore);
+                        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                        board.find("#areas g").children().hover(
+                                function () {
+                                    $(this).css("opacity", "0.5").css('cursor', 'pointer');
+                                },
+                                function () {
+                                    $(this).css("opacity", "1");
+                                }
+                        ).click(function () {
+                            game.handleInput($(this));
+                        });
 
                         // update functions
                         function updatePlayerStrings() {
-                            playerNameElement.text(player.name);
+                            playerNameElement.text(game.currentPlayer.name);
                         }
 
                         function updatePlayerPoints() {
-
-                            for(var key in player.points) {
-                                var field = scoreBoard.find('#id-' + key);
-                                field.text(player.points[key]);
-                            }
-                        }
-
-                        function updateScore(el) {
-                            var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
-
-                            if (points.length < 3) {
-                                switch (scoreParameters[0]) {
-                                    case "s":
-                                        points.push([scoreParameters[1], singleMultiplier]);
-                                        break;
-                                    case "d":
-                                        points.push([scoreParameters[1], doubleMultiplier]);
-                                        break;
-                                    case "t":
-                                        points.push([scoreParameters[1], trippleMultiplier]);
-                                        break;
-                                    case "Bull":
-                                        points.push([bullseye, singleMultiplier]);
-                                        break;
-                                    case "Outer":
-                                        points.push([outer, singleMultiplier]);
-                                        break;
-                                    default:
-                                        console.log("something bad happened");
-                                }
-
-                                addPointsElement(getScorePoints(el));
-                                currentScore = currentScore + getScorePoints(el);
-                                updateScoreElement(currentScore);
-                            }
-
-                            if (points.length == 3) {
-                                button.prop('disabled', false);
-                            }
+                            game.players.forEach(function(element, index, array){
+                                var field = scoreBoard.find('#id-' + element.id);
+                                console.log(element.points);
+                                field.text(element.points);
+                            });
                         }
 
                         function addPointsElement(score) {
+                            // TODO: implement in states
                             currentScoreElement.append('<div class="col-md-4">'
                                     + score + '<span class="glyphicon glyphicon-remove"></span></div>');
                             var lastScoreElement = currentScoreElement.find('div').last();
@@ -316,17 +330,6 @@
                         function removePointElements() {
                             currentScoreElement.find('div').remove();
                         }
-
-                        board.find("#areas g").children().hover(
-                                function () {
-                                    $(this).css("opacity", "0.5").css('cursor', 'pointer');
-                                },
-                                function () {
-                                    $(this).css("opacity", "1");
-                                }
-                        ).click(function () {
-                            updateScore($(this));
-                        });
 
                         /*
                          some helper function(s), maybe not needed
