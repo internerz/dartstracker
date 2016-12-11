@@ -79,7 +79,7 @@ class Game extends Model
     /**
      * @return \App\User
      */
-    public function getCurrentPlayer()
+    public function getLastPlayer()
     {
         if ($this->hasPoints()) {
             return User::find($this->legs->last()->points->last()->user_id);
@@ -92,10 +92,10 @@ class Game extends Model
     /**
      * @return \App\User
      */
-    public function getNextPlayer()
+    public function getCurrentPlayer()
     {
         $playersInGame = GameOrder::where('game_id', $this->id)->count();
-        $currentPlayer = $this->getCurrentPlayer();
+        $currentPlayer = $this->getLastPlayer();
 
         if ($currentPlayer->order->where('game_id', $this->id)->first()->position + 1 == $playersInGame) {
             $position = 0;
@@ -103,7 +103,6 @@ class Game extends Model
             $position = $currentPlayer->order->where('game_id', $this->id)->first()->position + 1;
         }
 
-        $this->getCurrentPointsOfAllPlayer();
         return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
     }
 

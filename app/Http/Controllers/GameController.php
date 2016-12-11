@@ -77,8 +77,8 @@ class GameController extends Controller
         }
 
         $response = [
-            'nextPlayerId'   => $leg->game->getNextPlayer()->id,
-            'nextPlayerName' => $leg->game->getNextPlayer()->name,
+            'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
+            'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
             'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer()
         ];
 

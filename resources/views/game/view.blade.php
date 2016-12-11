@@ -12,8 +12,8 @@
                         Ruleset: {{ $game->ruleset }}<br/>
                         Number of legs to win: {{ $game->number_of_legs_to_win }}<br/>
                         Current leg: {{ $game->legs->count() }}<br/>
+                        Last player: {{ $game->getLastPlayer()->name }}<br/>
                         Current player: {{ $game->getCurrentPlayer()->name }}<br/>
-                        Next player: {{ $game->getNextPlayer()->name }}<br/>
                         @if ($currentLeg)
                             Current leg ID: {{ $currentLeg->id }}<br/>
                         @endif
