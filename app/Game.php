@@ -79,7 +79,7 @@ class Game extends Model
     /**
      * @return \App\User
      */
-    public function getCurrentPlayer()
+    public function getLastPlayer()
     {
         if ($this->hasPoints()) {
             return User::find($this->legs->last()->points->last()->user_id);
@@ -92,10 +92,10 @@ class Game extends Model
     /**
      * @return \App\User
      */
-    public function getNextPlayer()
+    public function getCurrentPlayer()
     {
         $playersInGame = GameOrder::where('game_id', $this->id)->count();
-        $currentPlayer = $this->getCurrentPlayer();
+        $currentPlayer = $this->getLastPlayer();
 
         if ($currentPlayer->order->where('game_id', $this->id)->first()->position + 1 == $playersInGame) {
             $position = 0;
@@ -103,7 +103,28 @@ class Game extends Model
             $position = $currentPlayer->order->where('game_id', $this->id)->first()->position + 1;
         }
 
-        return User::find(GameOrder::where('game_id', $this->id)->where('position',
-                $position)->get()->first()->user_id);
+        return User::find(GameOrder::where('game_id', $this->id)->where('position', $position)->get()->first()->user_id);
+    }
+
+    public function getCurrentPointsOfPlayer(User $user) {
+        $points = Point::where('user_id', $user->id)->where('leg_id', $this->getCurrentLeg()->id)->get()->map(function($item){
+            return $item->points * $item->multiplier;
+        })->sum(function($value){
+            return $value;
+        });
+
+        return $points;
+    }
+
+    public function getCurrentPointsOfAllPlayer(){
+        $users = $this->users()->get();
+
+        $points = array();
+
+        foreach ($users as $user){
+            $points[$user->id] = $this->getCurrentPointsOfPlayer($user);
+        }
+
+        return $points;
     }
 }

@@ -54,7 +54,6 @@ class GameController extends Controller
         $opponents = json_decode($request->get('opponents'));
         $opponents[] = \Auth::user()->id;
         $game->users()->sync($opponents);
-
         $this->createLeg($game);
         $this->setOrder($game);
 
@@ -74,11 +73,13 @@ class GameController extends Controller
             $point->multiplier = $data[1];
             $point->user_id = $request->get('user');
             $leg->points()->save($point);
+
         }
 
         $response = [
-            'nextPlayerId'   => $leg->game->getNextPlayer()->id,
-            'nextPlayerName' => $leg->game->getNextPlayer()->name,
+            'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
+            'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
+            'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer()
         ];
 
         return \Response::json(json_encode($response));
