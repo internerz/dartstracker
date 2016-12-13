@@ -1,16 +1,29 @@
-
 // Body
-$body-bg: #f5f8fa;
+$body-bg: #444;
+
+$dartboard-red: #ed3737;
+$dartboard-green: #4f9962;
+$dartboard-brown: #f7e9cd;
+$dartboard-black: #000000;
+
+$default-transition: all 0.2s ease-out;
+$link-hover-decoration: none;
+
+// Container Size
+$grid-gutter-width:       30px;
+$container-tablet:        (720px + $grid-gutter-width);
+$container-desktop:       (940px + $grid-gutter-width);
+$container-large-desktop: (1024px + $grid-gutter-width);
 
 // Borders
-$laravel-border-color: darken($body-bg, 10%);
+$laravel-border-color: $dartboard-black;
 $list-group-border: $laravel-border-color;
 $navbar-default-border: $laravel-border-color;
 $panel-default-border: $laravel-border-color;
 $panel-inner-border: $laravel-border-color;
 
 // Brands
-$brand-primary: #3097D1;
+$brand-primary: #ed3737;
 $brand-info: #8eb4cb;
 $brand-success: #2ab27b;
 $brand-warning: #cbb956;
@@ -20,10 +33,18 @@ $brand-danger:  #bf5329;
 $font-family-sans-serif: "Raleway", sans-serif;
 $font-size-base: 14px;
 $line-height-base: 1.6;
-$text-color: #636b6f;
+$text-color: #444444;
 
 // Navbar
-$navbar-default-bg: #fff;
+$navbar-default-bg:                #fff;
+$navbar-default-link-color:        $text-color;
+$navbar-default-link-hover-color:  #fff;
+$navbar-default-link-hover-bg:     $brand-primary;
+$navbar-default-link-active-color: $navbar-default-link-hover-color;
+$navbar-default-link-active-bg:    $navbar-default-link-hover-bg;
+$dropdown-link-color:              $navbar-default-link-color;
+$dropdown-link-hover-color:        $navbar-default-link-hover-color;
+$dropdown-link-hover-bg:           $navbar-default-link-hover-bg;
 
 // Buttons
 $btn-default-color: $text-color;
@@ -35,3 +56,8 @@ $input-color-placeholder: lighten($text-color, 30%);
 
 // Panels
 $panel-default-heading-bg: #fff;
+
+// Border Radius
+$border-radius-base:  0px;
+$border-radius-large: 0px;
+$border-radius-small: 0px;

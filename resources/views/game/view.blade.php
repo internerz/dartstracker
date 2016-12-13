@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Game #{{ $game->id }}</div>
 
@@ -37,7 +37,9 @@
 
                     @if ($currentLeg)
                         <div class="panel-body" id="points">
-                            @include('game.dartboard')
+                            <div class="col-lg-10 col-lg-offset-1">
+                                @include('game.dartboard')
+                            </div>
 
                             <div class="row" id="currentScoreElement">
                                 <h2 id="score" class="score col-sm-12">

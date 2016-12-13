@@ -11,6 +11,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Righteous&text=Dartstracker&effect=fire-animation" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
 
     <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
@@ -40,7 +42,7 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand font-effect-fire-animation" href="{{ url('/') }}">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
