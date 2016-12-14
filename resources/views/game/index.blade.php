@@ -4,20 +4,42 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Games</div>
+                <h1>
+                    Games
+                    <a href="/game/create" title="Create Game"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                </h1>
 
-                    <div class="panel-body">
-                        <a href="/game/create">Create game</a>
-                        @if (count($games) > 0)
-                            <ul class="list-group">
-                                @foreach ($games as $game)
-                                    <li class="list-group-item<?php echo ($game->winner_user_id > 0) ? ' disabled' : ''; ?>" ><a href="/game/{{ $game->id }}">{{ $game->created_at }}, Mode: {{ $game->mode->name }}</a></li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </div>
-                </div>
+                @if (count($games) > 0)
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="hidden-xs">#</th>
+                            <th>Date</th>
+                            <th>Players</th>
+                            <th>Rules</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($games as $i => $game)
+                            <tr>
+                                <th scope="row" class="hidden-xs">{{ $i+1 }}</th>
+                                <td>
+                                    <a href="/game/{{ $game->id }}">{{ date('Y-m-d @h:m', strtotime($game->created_at)) }}</a>
+                                </td>
+                                <td class="players">
+                                    @foreach ($game->users as $player)
+                                        <span>{{ $player->name }}</span><br/>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    {{ $game->mode->name }}<br/>
+                                    {{ $game->ruleset }}
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @endif
             </div>
         </div>
     </div>

@@ -1,6 +1,21 @@
+.header {
+  padding: 20px 0;
+
+  .navbar-brand {
+    height: auto;
+  }
+
+  &.navbar-default .navbar-brand {
+    color: $navbar-default-link-color;
+
+    &:hover {
+      color: $navbar-default-link-hover-color;
+    }
+  }
+}
+
 .navbar-brand {
-  font-family: cursive;
-  //font-family: 'Righteous', cursive;
+  font-family: 'Righteous', cursive;
   font-size: 200%;
 }
 

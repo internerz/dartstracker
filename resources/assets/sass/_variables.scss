@@ -1,5 +1,5 @@
 // Body
-$body-bg: #444;
+$body-bg: #fff;
 
 $dartboard-red: #ed3737;
 $dartboard-green: #4f9962;
@@ -16,7 +16,7 @@ $container-desktop:       (940px + $grid-gutter-width);
 $container-large-desktop: (1024px + $grid-gutter-width);
 
 // Borders
-$laravel-border-color: $dartboard-black;
+$laravel-border-color: #fff;
 $list-group-border: $laravel-border-color;
 $navbar-default-border: $laravel-border-color;
 $panel-default-border: $laravel-border-color;
@@ -36,15 +36,22 @@ $line-height-base: 1.6;
 $text-color: #444444;
 
 // Navbar
-$navbar-default-bg:                #fff;
-$navbar-default-link-color:        $text-color;
-$navbar-default-link-hover-color:  #fff;
-$navbar-default-link-hover-bg:     $brand-primary;
-$navbar-default-link-active-color: $navbar-default-link-hover-color;
-$navbar-default-link-active-bg:    $navbar-default-link-hover-bg;
-$dropdown-link-color:              $navbar-default-link-color;
-$dropdown-link-hover-color:        $navbar-default-link-hover-color;
-$dropdown-link-hover-bg:           $navbar-default-link-hover-bg;
+$navbar-default-bg:                  $dartboard-red;
+$navbar-default-link-color:          #fff;
+$navbar-default-link-hover-color:    $dartboard-brown;
+$navbar-default-link-hover-bg:       darken($navbar-default-bg, 15%);
+$navbar-default-link-active-color:   $navbar-default-link-hover-color;
+$navbar-default-link-active-bg:      $navbar-default-link-hover-bg;
+$navbar-default-toggle-hover-bg:     $navbar-default-link-hover-bg;
+$navbar-default-toggle-icon-bar-bg:  $navbar-default-link-color;
+$navbar-default-toggle-border-color: $navbar-default-link-color;
+$dropdown-bg:                        $navbar-default-bg;
+$dropdown-link-color:                $navbar-default-link-color;
+$dropdown-link-hover-color:          $navbar-default-link-hover-color;
+$dropdown-link-hover-bg:             $navbar-default-link-hover-bg;
+$navbar-padding-horizontal:          15px;
+$navbar-padding-vertical:            8px;
+$nav-link-padding:                   $navbar-padding-vertical $navbar-padding-horizontal;
 
 // Buttons
 $btn-default-color: $text-color;

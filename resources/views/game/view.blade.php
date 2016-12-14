@@ -4,46 +4,42 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Game #{{ $game->id }}</div>
+                <h1>Game #{{ $game->id }}</h1>
 
-                    <div class="panel-body">
-                        Mode: {{ $game->mode->name }}<br/>
-                        Ruleset: {{ $game->ruleset }}<br/>
-                        Number of legs to win: {{ $game->number_of_legs_to_win }}<br/>
-                        Current leg: {{ $game->legs->count() }}<br/>
-                        Last player: {{ $game->getLastPlayer()->name }}<br/>
-                        Current player: {{ $game->getCurrentPlayer()->name }}<br/>
-                        @if ($currentLeg)
-                            Current leg ID: {{ $currentLeg->id }}<br/>
-                        @endif
-                        Players: @foreach ($game->users as $user)
-                            {{ $user->name }},
-                        @endforeach
-                    </div>
+                Mode: {{ $game->mode->name }}<br/>
+                Ruleset: {{ $game->ruleset }}<br/>
+                Number of legs to win: {{ $game->number_of_legs_to_win }}<br/>
+                Current leg: {{ $game->legs->count() }}<br/>
+                Last player: {{ $game->getLastPlayer()->name }}<br/>
+                Current player: {{ $game->getCurrentPlayer()->name }}<br/>
+                @if ($currentLeg)
+                    Current leg ID: {{ $currentLeg->id }}<br/>
+                @endif
+                Players: @foreach ($game->users as $user)
+                    {{ $user->name }},
+                @endforeach
+
+                <h2>Score</h2>
+
+                <div class="row">
+                    @foreach ($game->users as $user)
+                        <div class="col-md-{{ 12/count($game->users) }} col-xs-6">
+                            <a href="/user/{{ $user->id }}">{{ $user->name }}</a><br/>
+                            <span class="score"
+                                  id="id-{{$user->id}}">501 : {{$game->getCurrentPointsOfPlayer($user)}}</span>
+                        </div>
+                    @endforeach
                 </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">Score</div>
+                @if ($currentLeg)
+                    <div class="row" id="points">
+                        <div class="col-lg-10 col-lg-offset-1">
+                            @include('game.dartboard')
+                        </div>
 
-                    <div class="panel-body" id="scoreBoard">
-                        @foreach ($game->users as $user)
-                            <div class="col-md-{{ 12/count($game->users) }}">
-                                <a href="/user/{{ $user->id }}">{{ $user->name }}</a><br/>
-                                <span class="score"
-                                      id="id-{{$user->id}}">501 : {{$game->getCurrentPointsOfPlayer($user)}}</span>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    @if ($currentLeg)
-                        <div class="panel-body" id="points">
-                            <div class="col-lg-10 col-lg-offset-1">
-                                @include('game.dartboard')
-                            </div>
-
-                            <div class="row" id="currentScoreElement">
-                                <h2 id="score" class="score col-sm-12">
+                        <div class="col-sm-12">
+                            <div id="currentScoreElement" class="score">
+                                <h2 id="score" class="score">
                                     <span id="playerName">{{ $game->getCurrentPlayer()->name }}</span> darts:
                                     <span id="playerScore">0</span>
                                 </h2>
@@ -51,8 +47,8 @@
 
                             <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
                         </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
