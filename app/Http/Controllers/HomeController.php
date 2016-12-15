@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use \Illuminate\Http\Response;
 
 class HomeController extends Controller
 {
@@ -21,8 +22,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $class = $request->cookie('splashscreen') ? '' : 'splashscreen';
+        $response = new Response(view('home', array(
+            'class' => $class,
+        )));
+        $response->withCookie(cookie('splashscreen', true, 3600));
+        return $response;
     }
 }

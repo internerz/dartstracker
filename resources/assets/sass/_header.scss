@@ -2,6 +2,8 @@
   padding: 20px 0;
 
   .navbar-brand {
+    font-family: 'Righteous', cursive;
+    font-size: 28px;
     height: auto;
   }
 
@@ -14,11 +16,93 @@
   }
 }
 
-.navbar-brand {
-  font-family: 'Righteous', cursive;
-  font-size: 200%;
-}
+@media (max-width: $screen-xs-max) {
+  body.splashscreen {
+    .navbar {
+      animation-delay: 2s;
+      animation-duration: .5s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: 1;
+      animation-name: navbarhomebanneranimation;
+      animation-timing-function: ease-out;
+      height: 100%;
+      left: 0;
+      max-height: 2000px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1;
 
-.dropdown-menu > li > a {
-  transition: all 0.2s ease-in;
+      a.navbar-brand {
+        animation-delay: 1.9s;
+        animation-duration: .6s;
+        animation-fill-mode: forwards;
+        animation-iteration-count: 1;
+        animation-name: navbarlogoanimation;
+        animation-timing-function: ease-in;
+        font-size: 45px;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .navbar-toggle {
+      animation-delay: 3s;
+      animation-duration: .6s;
+      animation-fill-mode: forwards;
+      animation-iteration-count: 1;
+      animation-name: navhide;
+      opacity: 0;
+    }
+
+    & > div > .container {
+      margin-top: 92px;
+    }
+  }
+
+  @keyframes navhide {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes navbarhomebanneranimation {
+    0% {
+      height: 667px;
+      position: fixed;
+    }
+
+    99% {
+      height: 92px;
+      position: fixed;
+    }
+
+    100% {
+      height: auto;
+      position: fixed;
+    }
+  }
+
+  @keyframes navbarlogoanimation {
+    100% {
+      font-size: 28px;
+      left: 0;
+      top: 20px;
+      transform: translate(0%, 0%);
+    }
+  }
+
+  .navbar-brand {
+    font-family: 'Righteous', cursive;
+    font-size: 200%;
+  }
+
+  .dropdown-menu > li > a {
+    transition: all 0.2s ease-in;
+  }
 }
