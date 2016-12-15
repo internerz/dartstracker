@@ -42,7 +42,7 @@
                     <label>Opponents</label>
                     <div class="list-group" id="opponentList">
                         <a href="#" class="list-group-item hidden" title="Remove opponent">
-                            <span class="name">Cras justo odio</span> <span class="glyphicon glyphicon-trash pull-right"
+                            <span class="name"></span> <span class="glyphicon glyphicon-trash pull-right"
                                                                             aria-hidden="true"></span>
                         </a>
                     </div>
