@@ -18,6 +18,7 @@ $(document).ready(function () {
                 element.click(function () {
                     users.splice(users.indexOf(ui.item.id), 1);
                     $(this).remove();
+                    $('#opponents').val(JSON.stringify(users));
                     return false;
                 });
                 element.appendTo(opponentList);
