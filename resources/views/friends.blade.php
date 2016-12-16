@@ -35,8 +35,9 @@
                     {{ csrf_field() }}
 
                     <div class="form-group">
-                        <label for="name">Add Friend (id)</label>
-                        <input type="number" class="form-control" id="name" name="friend_id">
+                        <label for="name">Add Friend</label>
+                        <input type="text" class="form-control" id="name" name="friend_name">
+                        <input type="hidden" name="friend_id" id="friend_id">
                     </div>
                     <button type="submit" class="btn btn-primary">Add Friend</button>
                 </form>
@@ -51,4 +52,16 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('javascript')
+    <script type="text/javascript">
+        $('#name').autocomplete({
+            source: '/user/find',
+            minLength: 1,
+            select: function (event, ui) {
+                $('#friend_id').val(ui.item.id);
+            }
+        })
+    </script>
 @endsection

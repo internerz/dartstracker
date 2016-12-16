@@ -19,7 +19,7 @@ class FriendController extends Controller
     public function add(Request $request)
     {
         $this->validate($request, [
-            'friend_id' => 'unique:friend_user|min:1|integer'
+            'friend_id' => 'required|unique:friend_user|min:1'
         ]);
 
         $user = Auth::user();
