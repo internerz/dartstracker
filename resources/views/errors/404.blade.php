@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Site not available</h1>
-                <p>Looks like something went wrong. Please try again later or contact the admin if the issue remains.</p>
+                <h1>Site not found</h1>
+                <p>Looks like there is no page where you are looking. Please go to the <a href="/">home page</a> and navigate from there.</p>
             </div>
         </div>
     </div>
