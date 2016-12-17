@@ -21,7 +21,7 @@
 
                 <h2>Score</h2>
 
-                <div class="row">
+                <div class="row" id="scoreBoard">
                     @foreach ($game->users as $user)
                         <div class="col-md-{{ 12/count($game->users) }} col-xs-6">
                             <a href="/user/{{ $user->id }}">{{ $user->name }}</a><br/>
