@@ -13,7 +13,7 @@ class FriendController extends Controller
     {
         $friends = Auth::user()->friends()->get();
 
-        return view('friends', compact('friends'));
+        return view('friends.index', compact('friends'));
     }
 
     public function add(Request $request)

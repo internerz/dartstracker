@@ -7,7 +7,7 @@
                 <h1>
                     {{ $user->name }}
                     @if (\Auth::user()->id == $user->id)
-                        <a href="/profile/edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="/user/edit"><span class="glyphicon glyphicon-edit"></span></a>
                     @elseif (\Auth::check())
                         @if ($areFriends)
                             <a href="{{ url('/friends') }}"

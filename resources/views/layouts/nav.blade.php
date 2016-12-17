@@ -31,14 +31,14 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="/profile">Profile</a>
+                                <a href="/user">Profile</a>
                             </li>
                             <li>
                                 <a href="/friends">Friends</a>
                             </li>
                             @if (Auth::user()->admin == true)
                                 <li>
-                                    <a href="/modes">Manage Modes</a>
+                                    <a href="/admin/modes">Manage Modes</a>
                                 </li>
                             @endif
                             <li>

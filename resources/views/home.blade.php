@@ -16,7 +16,7 @@
                         <li><a href="/game">List games</a></li>
                         <li><a href="/game/create">Create game</a></li>
                         @if (Auth::user()->admin == true)
-                            <li><a href="/modes">Modes</a></li>
+                            <li><a href="/admin/modes">Modes</a></li>
                         @endif
                     </ul>
                 @endif
