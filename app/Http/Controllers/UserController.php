@@ -21,7 +21,7 @@ class UserController extends Controller
                         User::where('name', 'LIKE', $nameIsLike)->take(10 - $users->count())->get()
                     );
                 }
-            } else{
+            } else {
                 $users = User::where('name', 'LIKE', $nameIsLike)->take(10)->get();
             }
 
