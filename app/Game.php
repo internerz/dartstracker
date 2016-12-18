@@ -142,4 +142,16 @@ class Game extends Model
         $gameOrder->state_id = $id;
         $gameOrder->save();
     }
+
+    public function getCurrentStateOfAllPlayer(){
+        $users = $this->users()->get();
+
+        $states = array();
+
+        foreach($users as $user) {
+            $states[$user->id] = $this->getCurrentState($user);
+        }
+
+        return $states;
+    }
 }
