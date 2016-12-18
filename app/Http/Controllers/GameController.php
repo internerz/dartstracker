@@ -57,7 +57,7 @@ class GameController extends Controller
         $this->createLeg($game);
         $this->setOrder($game);
 
-        return redirect()->to('/game/'.$game->id);
+        return redirect()->route('view-game', $game->id);
     }
 
 

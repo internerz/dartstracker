@@ -15,13 +15,13 @@
 
                                 {{ $friend->name }}
 
-                                <a href="{{ url('/friends') }}"
+                                <a href="{{ route('remove-friend') }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('delete{{$friend->id}}').submit();">
                                     <span type="" class="glyphicon glyphicon-remove"></span>
                                 </a>
 
-                                <form method="POST" action="/friends" id="delete{{$friend->id}}">
+                                <form method="POST" action="{{ route('remove-friend') }}" id="delete{{$friend->id}}">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="friend_id" value="{{$friend->id}}">
@@ -31,7 +31,7 @@
                     </ul>
                 @endif
 
-                <form method="POST" action="/friends">
+                <form method="POST" action="{{ route('add-friend') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group">
@@ -57,7 +57,7 @@
 @section('javascript')
     <script type="text/javascript">
         $('#name').autocomplete({
-            source: '/user/find',
+            source: '{{ route('find-user') }}',
             minLength: 1,
             select: function (event, ui) {
                 $('#friend_id').val(ui.item.id);

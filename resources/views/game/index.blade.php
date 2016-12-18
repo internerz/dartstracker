@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <h1>
                     Games
-                    <a href="/game/create" title="Create Game"><span class="glyphicon glyphicon-plus-sign"></span></a>
+                    <a href="{{ route('create-game') }}" title="Create Game"><span class="glyphicon glyphicon-plus-sign"></span></a>
                 </h1>
 
                 @if (count($games) > 0)
@@ -24,7 +24,7 @@
                             <tr>
                                 <th scope="row" class="hidden-xs">{{ $i+1 }}</th>
                                 <td>
-                                    <a href="/game/{{ $game->id }}">{{ date('Y-m-d @h:m', strtotime($game->created_at)) }}</a>
+                                    <a href="{{ route('view-game', $game->id) }}">{{ date('Y-m-d @H:i', strtotime($game->created_at)) }}</a>
                                 </td>
                                 <td class="players">
                                     @foreach ($game->users as $player)

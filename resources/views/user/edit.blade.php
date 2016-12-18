@@ -19,7 +19,7 @@
                 @endif
 
                 <h1>Update profile</h1>
-                <form class="form-horizontal" role="form" method="POST" action="{{ url('/user') }}">
+                <form class="form-horizontal" role="form" method="POST" action="{{ route('store-user') }}">
                     {{ csrf_field() }}
 
                     <input type="hidden" name="_method" value="PUT"/>

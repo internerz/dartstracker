@@ -11,12 +11,12 @@
                         @foreach ($modes as $mode)
                             <li class="list-group-item">
                                 {{$mode->name}}
-                                <a href="{{ url('/admin/modes') }}"
+                                <a href="{{ route('delete-mode') }}"
                                    onclick="event.preventDefault();
                                            document.getElementById('delete{{$mode->id}}').submit();">
                                     <span type="" class="glyphicon glyphicon-remove"></span>
                                 </a>
-                                <form method="POST" action="/admin/modes" id="delete{{$mode->id}}">
+                                <form method="POST" action="{{ route('delete-mode') }}" id="delete{{$mode->id}}">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="id" value="{{$mode->id}}">
@@ -26,7 +26,7 @@
                     </ul>
                 @endif
 
-                <form method="POST" action="/admin/modes">
+                <form method="POST" action="{{ route('store-mode') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group">

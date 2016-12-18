@@ -7,30 +7,30 @@
                 <h1>
                     {{ $user->name }}
                     @if (\Auth::user()->id == $user->id)
-                        <a href="/user/edit"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a href="{{ route('edit-profile') }}"><span class="glyphicon glyphicon-edit"></span></a>
                     @elseif (\Auth::check())
                         @if ($areFriends)
-                            <a href="{{ url('/friends') }}"
+                            <a href="{{ route('remove-friend') }}"
                                onclick="event.preventDefault();
                                                document.getElementById('deleteFriendForm').submit();">
                                 <span class="glyphicon glyphicon-user"></span><span
                                         class="glyphicon glyphicon-minus"></span>
                             </a>
 
-                            <form method="POST" action="/friends" id="deleteFriendForm">
+                            <form method="POST" action="{{ route('remove-friend') }}" id="deleteFriendForm">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <input type="hidden" name="friend_id" value="{{ $user->id }}">
                             </form>
                         @else
-                            <a href="{{ url('/friends') }}"
+                            <a href="{{ route('add-friend') }}"
                                onclick="event.preventDefault();
                                                document.getElementById('addFriendForm').submit();">
                                 <span class="glyphicon glyphicon-user"></span><span
                                         class="glyphicon glyphicon-plus"></span>
                             </a>
 
-                            <form method="POST" action="/friends" id="addFriendForm">
+                            <form method="POST" action="{{ route('add-friend') }}" id="addFriendForm">
                                 {{ csrf_field() }}
                                 <input type="hidden" name="friend_id" value="{{ $user->id }}">
                             </form>
@@ -51,7 +51,7 @@
                             <ul class="list-group">
                                 @foreach ($user->friends as $friend)
                                     <li class="list-group-item">
-                                        <a href="/user/{{ $friend->id }}">{{ $friend->name }}</a>
+                                        <a href="{{ route('show-user', $friend->id) }}">{{ $friend->name }}</a>
                                     </li>
                                 @endforeach
                             </ul>
