@@ -12,7 +12,18 @@ class UserController extends Controller
     public function find(Request $request)
     {
         if (\Auth::check()) {
-            $users = User::where('name', 'LIKE', '%'.$request->get('term').'%')->take(10)->get();
+            $nameIsLike = '%'.$request->get('term').'%';
+
+            if ((boolean) $request->get('friendsFirst')) {
+                $users = \Auth::user()->friends()->where('name', 'LIKE', $nameIsLike)->take(10)->get();
+                if ($users->count() < 10) {
+                    $users = $users->merge(
+                        User::where('name', 'LIKE', $nameIsLike)->take(10 - $users->count())->get()
+                    );
+                }
+            } else{
+                $users = User::where('name', 'LIKE', $nameIsLike)->take(10)->get();
+            }
 
             foreach ($users as $key => $user) {
                 if ($user->id != \Auth::user()->id) {

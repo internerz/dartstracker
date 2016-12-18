@@ -43,7 +43,7 @@
                     <div class="list-group" id="opponentList">
                         <a href="#" class="list-group-item hidden" title="Remove opponent">
                             <span class="name"></span> <span class="glyphicon glyphicon-trash pull-right"
-                                                                            aria-hidden="true"></span>
+                                                             aria-hidden="true"></span>
                         </a>
                     </div>
 
@@ -52,4 +52,47 @@
             </div>
         </div>
     </div>
+@endsection
+
+
+@section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var users = [];
+            var opponentList = $('#opponentList');
+
+            $('#opponentSearch').autocomplete({
+                source: function(request, response) {
+                    $.getJSON('/user/find', {
+                        term: request.term,
+                        friendsFirst: 1
+                    }, response);
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    if (users.indexOf(ui.item.id) == -1) {
+                        users.push(ui.item.id);
+
+                        var element = opponentList.find('a.hidden').clone();
+                        element
+                                .removeClass('hidden')
+                                .data('id', ui.item.id)
+                                .find('.name').text(ui.item.value);
+
+                        element.click(function () {
+                            users.splice(users.indexOf(ui.item.id), 1);
+                            $(this).remove();
+                            $('#opponents').val(JSON.stringify(users));
+                            return false;
+                        });
+                        element.appendTo(opponentList);
+                    }
+                },
+                close: function () {
+                    this.value = '';
+                    $('#opponents').val(JSON.stringify(users));
+                }
+            });
+        });
+    </script>
 @endsection

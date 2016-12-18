@@ -27,8 +27,8 @@ Route::group(['prefix' => 'game'], function () {
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', 'UserController@profile');
     Route::get('/edit', 'UserController@edit');
-    Route::get('/user/find', 'UserController@find');
-    Route::get('/user/{user}', 'UserController@show');
+    Route::get('/find', 'UserController@find');
+    Route::get('/{user}', 'UserController@show');
 
     Route::put('/', 'UserController@store');
 });
