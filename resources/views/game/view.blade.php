@@ -121,13 +121,6 @@
                             this.currentState = this.states[self.statesIndex];
                             this.currentStateId = 0;
 
-                            this.nextState = function () {
-                                // TODO: not increment statesIndex but set states to a specific state --> no state ordering
-
-                                self.statesIndex++;
-                                self.currentState = self.states[self.statesIndex];
-                            }
-
                             this.setState = function(id) {
                                 this.states.forEach(function(element, index, array){
                                    if(element.id == id){
@@ -222,8 +215,6 @@
 
                             this.handleInput = function () {
                                 // add the points according to the state
-
-                                // certain condition -> player.nextState()
                             }
                         }
 
