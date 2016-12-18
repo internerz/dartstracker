@@ -102,6 +102,7 @@ class GameController extends Controller
             $order->game_id = $game->id;
             $order->user_id = $user->id;
             $order->position = $position;
+            $order->state_id = 1;
             $order->save();
         }
     }

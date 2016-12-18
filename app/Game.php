@@ -112,6 +112,8 @@ class Game extends Model
         })->sum(function($value){
             return $value;
         });
+        $this->setCurrentState($user, 2);
+        dd($this->getCurrentState($user));
 
         return $points;
     }
@@ -126,5 +128,20 @@ class Game extends Model
         }
 
         return $points;
+    }
+
+    public function getCurrentState(User $user) {
+        $stateId = $this->orders()->where('user_id', $user->id)->get()->first()->state_id;
+
+        $state = State::where('id', $stateId)->get()->first();
+        return $state;
+    }
+
+    public function setCurrentState(User $user, int $id) {
+        // TODO: set State to next State given by the game
+
+        $gameOrder = $this->orders()->where('user_id', $user->id)->get()->first();
+        $gameOrder->state_id = $id;
+        $gameOrder->save();
     }
 }
