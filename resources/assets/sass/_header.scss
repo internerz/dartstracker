@@ -106,3 +106,56 @@
     transition: all 0.2s ease-in;
   }
 }
+
+.notification-dropdown {
+  .dropdown-toggle {
+    font-size: 20px;
+    padding: 8px 5px;
+
+    &:hover {
+      background-color: transparent !important;
+    }
+
+    .count {
+      font-size: 16px;
+    }
+  }
+
+  &.open .dropdown-toggle {
+    background-color: transparent !important;
+  }
+
+  .notifications {
+    background-color: #fff;
+    min-width: 250px;
+    padding: 0;
+
+    .notification {
+      padding: 10px;
+
+      &:hover {
+        background-color: #fbfbfb;
+      }
+
+      &.read {
+        background-color: #f7f7f7;
+
+        &:hover {
+          background-color: #fbfbfb;
+        }
+      }
+
+      a, a:hover {
+        background-color: transparent;;
+        color: $brand-primary;
+        display: inline;
+        padding: 0;
+        white-space: normal;
+      }
+
+      form {
+        display: inline-block;
+      }
+    }
+  }
+}

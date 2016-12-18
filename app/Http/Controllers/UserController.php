@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Friend;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -96,7 +97,13 @@ class UserController extends Controller
         } else {
             return back();
         }
+    }
 
+    public function markNotificationAsRead(Request $request) {
+        $notification = \Auth::user()->notifications()->where('id', $request->get('notification'))->first();
+        $notification->read_at = Carbon::now();
+        $notification->save();
 
+        return back();
     }
 }
