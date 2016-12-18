@@ -112,8 +112,6 @@ class Game extends Model
         })->sum(function($value){
             return $value;
         });
-        $this->setCurrentState($user, 2);
-        dd($this->getCurrentState($user));
 
         return $points;
     }
