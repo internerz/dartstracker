@@ -77,12 +77,17 @@
                         var doubleMultiplier = 2;
                         var trippleMultiplier = 3;
 
-                        var Game = function (players) {
+                        var Game = function (players, stateInfo) {
                             var self = this;
                             this.players = [];
-                            this.states = [new DoubleIn(this), new DoubleOut(this)];
+                            this.states = [new DoubleIn(this), new DoubleOut(this)];        // TODO: get out of backend
                             players.forEach(function (element, index, array) {
-                                self.players.push(new Player(element, self.states));
+                                //self.players.push(new Player(element, self.states));
+
+                                var player = new Player(element, self.states);
+                                player.currentStateId = stateInfo[player.id].id;
+                                player.setState(player.currentStateId);
+                                self.players.push(player);
                             });
 
                             this.currentPlayer = this.players[1];
@@ -114,6 +119,7 @@
                             this.states = states;       // überflüssig? einfach game.states?
                             this.statesIndex = 0;
                             this.currentState = this.states[self.statesIndex];
+                            this.currentStateId = 0;
 
                             this.nextState = function () {
                                 // TODO: not increment statesIndex but set states to a specific state --> no state ordering
@@ -121,11 +127,22 @@
                                 self.statesIndex++;
                                 self.currentState = self.states[self.statesIndex];
                             }
+
+                            this.setState = function(id) {
+                                this.states.forEach(function(element, index, array){
+                                   if(element.id == id){
+                                       self.currentState = element;
+                                       self.currentStateId = id;
+                                       //TODO: add break-mechanism
+                                   }
+                                });
+                            }
                         }
 
                         var DoubleIn = function (game) {
                             this.game = game;
                             this.name = "DoubleIn";
+                            this.id = 1; //TODO: set with db
 
                             this.handleInput = function (el) {
 
@@ -138,7 +155,7 @@
                                             break;
                                         case "d":
                                             points.push([scoreParameters[1], doubleMultiplier]);
-                                            game.currentPlayer.nextState();
+                                            game.currentPlayer.setState(2);
                                             break;
                                         case "t":
                                             points.push([0, trippleMultiplier]);
@@ -165,6 +182,7 @@
                         var DoubleOut = function (game) {
                             this.game = game;
                             this.name = "DoubleOut";
+                            this.id = 2; // TODO: set with db
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
@@ -215,18 +233,16 @@
 
                         gameInfo.users.forEach(function (element, index, array) {
                             players.push(element);
+
+                            // TODO: set State
                         });
 
-                        var game = new Game(players);
+                        var stateInfo = {!! json_encode($game->getCurrentStateOfAllPlayer()) !!}
+
+                        var game = new Game(players, stateInfo);
 
                         var currentPlayer = {!! json_encode($game->getCurrentPlayer()) !!};
                         game.setCurrentPlayer(currentPlayer);
-
-                        var player = {
-                            id: "{{ \Auth::user()->id }}",
-                            name: "{{ \Auth::user()->name }}",
-                            points: ""
-                        };
 
                         board.find("#areas g").children().hover(
                                 function () {
@@ -251,10 +267,9 @@
                                     _token: csrf_token,
                                     user: game.currentPlayer.id,
                                     game: "{{ $game->id }}",
-                                    state_id: game.currentPlayer.statesIndex + 1,  //TODO: change... obviously
+                                    state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously
                                 },
                                 success: function (response) {
-//                                    console.log(JSON.parse(response)['currentState']);
                                     updatePlayerStates();
                                 },
                                 dataType: 'json'
