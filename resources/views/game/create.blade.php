@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Create Game</h1>
-                <form method="POST" action="/game">
+                <form method="POST" action="{{ route('store-game') }}">
                     {{ csrf_field() }}
 
                     <div class="form-group">
@@ -63,7 +63,7 @@
 
             $('#opponentSearch').autocomplete({
                 source: function(request, response) {
-                    $.getJSON('/user/find', {
+                    $.getJSON('{{ route('find-user') }}', {
                         term: request.term,
                         friendsFirst: 1
                     }, response);

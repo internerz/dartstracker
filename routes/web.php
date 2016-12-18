@@ -13,39 +13,39 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'game'], function () {
-    Route::get('/', 'GameController@index');
-    Route::get('/create', 'GameController@create');
-    Route::get('/{game}', 'GameController@view');
+    Route::get('/', 'GameController@index')->name('list-games');
+    Route::get('/create', 'GameController@create')->name('create-game');
+    Route::get('/{game}', 'GameController@view')->name('view-game');
 
-    Route::post('/', 'GameController@store');
-    Route::post('/{game}', 'GameController@storePoints');
+    Route::post('/', 'GameController@store')->name('store-game');
+    Route::post('/{game}', 'GameController@storePoints')->name('store-points');
 });
 
 Route::group(['prefix' => 'user'], function () {
-    Route::get('/', 'UserController@profile');
-    Route::get('/edit', 'UserController@edit');
-    Route::get('/find', 'UserController@find');
-    Route::get('/{user}', 'UserController@show');
+    Route::get('/', 'UserController@profile')->name('profile');
+    Route::get('/edit', 'UserController@edit')->name('edit-profile');
+    Route::get('/find', 'UserController@find')->name('find-user');
+    Route::get('/{user}', 'UserController@show')->name('show-user');
 
-    Route::put('/', 'UserController@store');
+    Route::put('/', 'UserController@store')->name('store-user');
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('/modes', 'AdminController@modes');
+    Route::get('/modes', 'AdminController@modes')->name('list-modes');
 
-    Route::post('/modes', 'AdminController@storeMode');
+    Route::post('/modes', 'AdminController@storeMode')->name('store-mode');
 
-    Route::delete('/modes', 'AdminController@deleteMode');
+    Route::delete('/modes', 'AdminController@deleteMode')->name('delete-mode');
 });
 
 Route::group(['prefix' => 'friends'], function () {
-    Route::get('/', 'FriendController@index');
+    Route::get('/', 'FriendController@index')->name('list-friends');
 
-    Route::post('/', 'FriendController@add');
+    Route::post('/', 'FriendController@add')->name('add-friend');
 
-    Route::delete('/', 'FriendController@remove');
+    Route::delete('/', 'FriendController@remove')->name('remove-friend');
 });
 

@@ -10,7 +10,7 @@
             </button>
 
             <!-- Branding Image -->
-            <a class="navbar-brand" href="{{ url('/') }}">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 {{ config('app.name', 'Dartstracker') }}
             </a>
         </div>
@@ -18,11 +18,11 @@
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                    <li><a href="{{ url('/register') }}">Register</a></li>
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ route('register') }}">Register</a></li>
                 @else
                     <li>
-                        <a href="/game">Games</a>
+                        <a href="{{ route('list-games') }}">Games</a>
                     </li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -31,24 +31,24 @@
 
                         <ul class="dropdown-menu" role="menu">
                             <li>
-                                <a href="/user">Profile</a>
+                                <a href="{{ route('profile') }}">Profile</a>
                             </li>
                             <li>
-                                <a href="/friends">Friends</a>
+                                <a href="{{ route('list-friends') }}">Friends</a>
                             </li>
                             @if (Auth::user()->admin == true)
                                 <li>
-                                    <a href="/admin/modes">Manage Modes</a>
+                                    <a href="{{ route('list-modes') }}">Manage Modes</a>
                                 </li>
                             @endif
                             <li>
-                                <a href="{{ url('/logout') }}"
+                                <a href="{{ route('logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
 
-                                <form id="logout-form" action="{{ url('/logout') }}" method="POST"
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                       style="display: none;">
                                     {{ csrf_field() }}
                                 </form>

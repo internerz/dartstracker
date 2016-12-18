@@ -8,15 +8,15 @@
 
                 @if (Auth::guest())
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href="{{ url('/login') }}">Login</a></li>
-                        <li role="presentation"><a href="{{ url('/register') }}">Register</a></li>
+                        <li role="presentation"><a href="{{ route('login') }}">Login</a></li>
+                        <li role="presentation"><a href="{{ route('register') }}">Register</a></li>
                     </ul>
                 @else
                     <ul class="nav nav-pills nav-stacked">
-                        <li><a href="/game">List games</a></li>
-                        <li><a href="/game/create">Create game</a></li>
+                        <li><a href="{{ route('list-games') }}">List games</a></li>
+                        <li><a href="{{ route('create-game') }}">Create game</a></li>
                         @if (Auth::user()->admin == true)
-                            <li><a href="/admin/modes">Modes</a></li>
+                            <li><a href="{{ route('list-modes') }}">Modes</a></li>
                         @endif
                     </ul>
                 @endif

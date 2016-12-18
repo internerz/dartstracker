@@ -24,7 +24,7 @@
                 <div class="row" id="scoreBoard">
                     @foreach ($game->users as $user)
                         <div class="col-md-{{ 12/count($game->users) }} col-xs-6">
-                            <a href="/user/{{ $user->id }}">{{ $user->name }}</a><br/>
+                            <a href="{{ route('show-user', $user->id) }}">{{ $user->name }}</a><br/>
                             <span class="score"
                                   id="id-{{$user->id}}">501 : {{$game->getCurrentPointsOfPlayer($user)}}</span>
                         </div>
@@ -243,7 +243,7 @@
 
                             $.ajax({
                                 type: "POST",
-                                url: window.location.href.split('#')[0],
+                                url: '{{ url()->current() }}',
                                 data: {
                                     _token: csrf_token,
                                     user: game.currentPlayer.id,
