@@ -15,7 +15,7 @@ class GameController extends Controller
 
     public function index()
     {
-        $games = Game::with('mode')->get()->sortByDesc('created_at');
+        $games = \Auth::user()->games()->with('mode')->get()->sortByDesc('created_at');
 
         return view('game.index', compact('games'));
     }
@@ -23,12 +23,15 @@ class GameController extends Controller
 
     public function view(Game $game)
     {
-        $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
-        // TODO: error handling when no game was found (e.g. a user entered a non-existing id)
+        if (in_array($game->id, \Auth::user()->games()->get()->pluck('id')->toArray())) {
+            $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
 
-        $currentLeg = $game->getCurrentLeg();
+            $currentLeg = $game->getCurrentLeg();
 
-        return view('game.view', compact('game', 'currentLeg'));
+            return view('game.view', compact('game', 'currentLeg'));
+        } else {
+            abort(404, 'You are not part of this game.');
+        }
     }
 
 
