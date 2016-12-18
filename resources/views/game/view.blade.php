@@ -27,7 +27,7 @@
                             <a href="{{ route('show-user', $user->id) }}">{{ $user->name }}</a><br/>
                             <span class="score"
                                   id="id-{{$user->id}}">501 : {{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
-                            <span>Current State: {{$game->getCurrentState($user)->name}}</span>
+                            <span id="state-{{$user->id}}">Current State: {{$game->getCurrentState($user)->name}}</span>
                         </div>
                     @endforeach
                 </div>
@@ -120,14 +120,12 @@
 
                                 self.statesIndex++;
                                 self.currentState = self.states[self.statesIndex];
-
-                                // TODO: AJAX-Call
-                                
                             }
                         }
 
                         var DoubleIn = function (game) {
                             this.game = game;
+                            this.name = "DoubleIn";
 
                             this.handleInput = function (el) {
 
@@ -166,6 +164,7 @@
 
                         var DoubleOut = function (game) {
                             this.game = game;
+                            this.name = "DoubleOut";
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
@@ -247,7 +246,23 @@
 
                             $.ajax({
                                 type: "POST",
-                                url: '{{ url()->current() }}',
+                                url: '{{ route('store-state', $game->id) }}',
+                                data: {
+                                    _token: csrf_token,
+                                    user: game.currentPlayer.id,
+                                    game: "{{ $game->id }}",
+                                    state_id: game.currentPlayer.statesIndex + 1,  //TODO: change... obviously
+                                },
+                                success: function (response) {
+//                                    console.log(JSON.parse(response)['currentState']);
+                                    updatePlayerStates();
+                                },
+                                dataType: 'json'
+                            });
+
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ route('store-points', $game->id) }}',
                                 data: {
                                     _token: csrf_token,
                                     user: game.currentPlayer.id,
@@ -286,6 +301,7 @@
                                 dataType: 'json'
                             });
 
+
                             return false;
                         });
 
@@ -303,6 +319,13 @@
                             game.players.forEach(function (element, index, array) {
                                 var field = scoreBoard.find('#id-' + element.id);
                                 field.text(element.points);
+                            });
+                        }
+
+                        function updatePlayerStates() {
+                            game.players.forEach(function (element, index, array) {
+                                var field = scoreBoard.find('#state-' + element.id);
+                                field.text("Current State: " + element.currentState.name);
                             });
                         }
 

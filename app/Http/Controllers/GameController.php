@@ -109,4 +109,26 @@ class GameController extends Controller
             $order->save();
         }
     }
+
+    public function storeState(Request $request)
+    {
+        // TODO: verfiy user data
+        $game = Game::find($request->get('game'));
+        $state_id = $request->get('state_id');
+        $user = User::find($request->get('user'));
+
+        //dd($game);
+
+        $gameOrder = $game->orders()->where('user_id', $user->id)->get()->first();
+        $gameOrder->state_id = $state_id;
+        $gameOrder->save();
+
+        //dd($gameOrder);
+
+        $response = [
+            'currentState'   => $game->getCurrentState($user)
+        ];
+
+        return \Response::json(json_encode($response));
+    }
 }
