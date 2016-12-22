@@ -38,6 +38,7 @@
                         <label for="name">Add Friend</label>
                         <input type="text" class="form-control" id="name" name="friend_name">
                         <input type="hidden" name="friend_id" id="friend_id">
+                        <input type="hidden" name="user_id" id="user_id" value="3">
                     </div>
                     <button type="submit" class="btn btn-primary">Add Friend</button>
                 </form>

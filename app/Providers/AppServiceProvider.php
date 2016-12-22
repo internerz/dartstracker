@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Validator;
+use Auth;
+use DB;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extend('unique_friend', function ($attribute, $value, $parameters, $validator) {
+            $user_id = Auth::id();
+            return !(DB::table('friend_user')->where('friend_id', "$value")->where('user_id', "$user_id")->exists());
+        });
     }
 
     /**

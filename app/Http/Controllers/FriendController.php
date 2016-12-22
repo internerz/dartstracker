@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddFriendRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
@@ -16,12 +17,8 @@ class FriendController extends Controller
         return view('friends.index', compact('friends'));
     }
 
-    public function add(Request $request)
+    public function add(AddFriendRequest $request)
     {
-        $this->validate($request, [
-            'friend_id' => 'required|unique:friend_user|min:1'
-        ]);
-
         $user = Auth::user();
         $user->friends()->attach($request->friend_id);   // add friend
         $friend = User::find($request->friend_id);       // find your friend, and...
