@@ -35,11 +35,13 @@ class GameController extends Controller
     }
 
 
-    public function create()
+    public function create(Request $request)
     {
+        //$friend = $request->friend;
+        $friend = User::find($request->friend);
         $modes = Mode::all();
 
-        return view('game.create', compact('modes'));
+        return view('game.create', array_add(compact('modes'), 'friend', $friend));
     }
 
 

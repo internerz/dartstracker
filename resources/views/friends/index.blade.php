@@ -26,6 +26,11 @@
                                     {{ method_field('DELETE') }}
                                     <input type="hidden" name="friend_id" value="{{$friend->id}}">
                                 </form>
+
+                                <a href="{{ route('create-game', array('friend' => $friend->id)) }}">
+                                    <span type="" class="glyphicon glyphicon-plus-sign"></span>
+                                </a>
+
                             </li>
                         @endforeach
                     </ul>

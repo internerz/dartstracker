@@ -61,8 +61,34 @@
             var users = [];
             var opponentList = $('#opponentList');
 
+            var friend = {!! json_encode($friend) !!};
+
+            function addOpponent(friend) {
+                if (users.indexOf(friend.id) == -1) {
+                    users.push(friend.id);
+                    var element = opponentList.find('a.hidden').clone();
+                    element
+                        .removeClass('hidden')
+                        .data('id', friend.id)
+                        .find('.name').text(friend.name);
+
+                    element.click(function () {
+                        users.splice(users.indexOf(friend.id), 1);
+                        $(this).remove();
+                        $('#opponents').val(JSON.stringify(users));
+                        return false;
+                    });
+                    element.appendTo(opponentList);
+                    $('#opponents').val(JSON.stringify(users));
+                }
+            };
+
+            if (friend != null) {
+                addOpponent(friend);
+            }
+
             $('#opponentSearch').autocomplete({
-                source: function(request, response) {
+                source: function (request, response) {
                     $.getJSON('{{ route('find-user') }}', {
                         term: request.term,
                         friendsFirst: 1
@@ -75,9 +101,9 @@
 
                         var element = opponentList.find('a.hidden').clone();
                         element
-                                .removeClass('hidden')
-                                .data('id', ui.item.id)
-                                .find('.name').text(ui.item.value);
+                            .removeClass('hidden')
+                            .data('id', ui.item.id)
+                            .find('.name').text(ui.item.value);
 
                         element.click(function () {
                             users.splice(users.indexOf(ui.item.id), 1);
