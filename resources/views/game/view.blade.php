@@ -80,7 +80,7 @@
                         var Game = function (players, stateInfo) {
                             var self = this;
                             this.players = [];
-                            this.states = [new DoubleIn(this), new DoubleOut(this)];        // TODO: get out of backend
+                            this.states = [new Playing(this)];        // TODO: get out of backend
                             players.forEach(function (element, index, array) {
                                 //self.players.push(new Player(element, self.states));
 
@@ -89,8 +89,8 @@
                                 player.setState(player.currentStateId);
                                 self.players.push(player);
                             });
-
-                            this.currentPlayer = this.players[1];
+//                            console.log(this.players);
+                            this.currentPlayer = this.players[0];
 
                             this.setCurrentPlayer = function (playerObject) {
 //                                console.log("ob", playerObject)
@@ -154,7 +154,8 @@
                                             points.push([0, trippleMultiplier]);
                                             break;
                                         case "Bull":
-                                            points.push([0, singleMultiplier]);
+                                            points.push([bullseye, singleMultiplier]);
+                                            game.currentPlayer.setState(2);
                                             break;
                                         case "Outer":
                                             points.push([0, singleMultiplier]);
@@ -212,9 +213,41 @@
 
                         var Playing = function (game) {
                             this.game = game;
+                            this.name = "Playing";
+                            this.id = 6; // TODO: set with db
 
-                            this.handleInput = function () {
-                                // add the points according to the state
+                            this.handleInput = function (el) {
+                                var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+
+                                if (points.length < 3) {
+                                    switch (scoreParameters[0]) {
+                                        case "s":
+                                            points.push([scoreParameters[1], singleMultiplier]);
+                                            break;
+                                        case "d":
+                                            points.push([scoreParameters[1], doubleMultiplier]);
+                                            break;
+                                        case "t":
+                                            points.push([scoreParameters[1], trippleMultiplier]);
+                                            break;
+                                        case "Bull":
+                                            points.push([bullseye, singleMultiplier]);
+                                            break;
+                                        case "Outer":
+                                            points.push([outer, singleMultiplier]);
+                                            break;
+                                        default:
+                                            console.log("something bad happened");
+                                    }
+
+                                    // TODO: check if points reached 170 (area of finishing)
+
+                                    updateGui(el);
+                                }
+
+                                if (points.length == 3) {
+                                    button.prop('disabled', false);
+                                }
                             }
                         }
 
@@ -276,12 +309,6 @@
                                     points: data,
                                 },
                                 success: function (response) {
-//                                    player = {
-//                                        id: JSON.parse(response)['nextPlayerId'],
-//                                        name: JSON.parse(response)['nextPlayerName'],
-//                                        points: JSON.parse(response)['playerPoints']
-//                                    };
-
                                     // TODO: auslagern?
                                     var playerPoints = JSON.parse(response)['playerPoints'];
 
@@ -306,8 +333,6 @@
                                 },
                                 dataType: 'json'
                             });
-
-
                             return false;
                         });
 
