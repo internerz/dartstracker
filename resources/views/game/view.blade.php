@@ -307,6 +307,7 @@
                                     _token: csrf_token,
                                     user: game.currentPlayer.id,
                                     leg: "{{ $currentLeg->id }}",
+                                    game: "{{$game->id}}",
                                     points: data,
                                 },
                                 success: function (response) {

@@ -113,7 +113,9 @@ class Game extends Model
             return $value;
         });
 
-        return $points;
+        $modeScore = $this->mode->first()->score;
+
+        return $modeScore - $points;
     }
 
     public function getCurrentPointsOfAllPlayer(){

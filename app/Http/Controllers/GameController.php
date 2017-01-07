@@ -139,6 +139,9 @@ class GameController extends Controller
 
     public function storeRound(Request $request) {
         $leg = Leg::find($request->get('leg'));
+        $game = Game::find($request->get('game'));
+        // for w/e-fucking reason not working: $game = $leg->game()->get();
+        $user = User::find($request->get('user'));
         $pointsArray = json_decode($request->get('points'));
 
         //var_dump("test", $pointsArray);
@@ -150,7 +153,7 @@ class GameController extends Controller
         $round = new Round;
         $round->user_id = $request->get('user');
         $round->score = $sum;
-        $round->rest = 0;
+        $round->rest = $game->getCurrentPointsOfPlayer($user);
         $leg->rounds()->save($round);
 
         return false;
