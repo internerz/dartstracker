@@ -214,7 +214,7 @@
                         var Playing = function (game) {
                             this.game = game;
                             this.name = "Playing";
-                            this.id = 6; // TODO: set with db
+                            this.id = 3; // TODO: set with db
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
