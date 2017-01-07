@@ -78,20 +78,31 @@
                         var doubleMultiplier = 2;
                         var trippleMultiplier = 3;
 
-                        var Game = function (players, stateInfo) {
+                        var Game = function () {
                             var self = this;
                             this.players = [];
                             this.states = [new Playing(this)];        // TODO: get out of backend
-                            players.forEach(function (element, index, array) {
-                                //self.players.push(new Player(element, self.states));
+
+                            var gameInfo = {!! json_encode($game) !!};
+                            var stateInfo = {!! json_encode($game->getCurrentStateOfAllPlayer()) !!};
+                            var scoreInfo = {!! json_encode($game->getCurrentPointsOfAllPlayer()) !!};
+
+                            gameInfo.users.forEach(function (element, index, array) {
 
                                 var player = new Player(element, self.states);
                                 player.currentStateId = stateInfo[player.id].id;
-                                player.setState(player.currentStateId);
+//                                player.setState(player.currentStateId);
                                 self.players.push(player);
+
+                                // TODO: set State
                             });
-//                            console.log(this.players);
-                            this.currentPlayer = this.players[0];
+
+                            for (var playerId in scoreInfo) {
+                                var player = self.players.find(function (player) {
+                                    return player.id == playerId;
+                                });
+                                player.points = scoreInfo[playerId];
+                            }
 
                             this.setCurrentPlayer = function (playerObject) {
 //                                console.log("ob", playerObject)
@@ -212,6 +223,16 @@
                             }
                         }
 
+                        var _sumOfPoints = function(array){
+                            var sum = 0;
+
+                            _.forEach(array, function(value){
+                                sum += value[0] * value[1];
+                            })
+
+                            return sum;
+                        }
+
                         var Playing = function (game) {
                             this.game = game;
                             this.name = "Playing";
@@ -219,6 +240,7 @@
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+                                var finished = false;
 
                                 if (points.length < 3) {
                                     switch (scoreParameters[0]) {
@@ -243,28 +265,30 @@
 
                                     // TODO: check if points reached 170 (area of finishing)
 
+                                    // TODO: check if points reached 0 (win)
+                                    if(game.currentPlayer.points - _sumOfPoints(points) == 0){
+                                        finished = true;
+                                    }
+
+                                    // TODO: check if overthrown
+                                    if(game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function(value){
+                                           value[0] = 0;
+                                        });
+                                        finished = true;
+                                        // TODO: mark foul
+                                    }
+
                                     updateGui(el);
                                 }
 
-                                if (points.length == 3) {
+                                if (points.length == 3 || finished) {
                                     button.prop('disabled', false);
                                 }
                             }
                         }
 
-                        var gameInfo = {!! json_encode($game) !!};
-
-                        var players = [];
-
-                        gameInfo.users.forEach(function (element, index, array) {
-                            players.push(element);
-
-                            // TODO: set State
-                        });
-
-                        var stateInfo = {!! json_encode($game->getCurrentStateOfAllPlayer()) !!}
-
-                        var game = new Game(players, stateInfo);
+                        var game = new Game();
 
                         var currentPlayer = {!! json_encode($game->getCurrentPlayer()) !!};
                         game.setCurrentPlayer(currentPlayer);
@@ -319,6 +343,10 @@
                                             return player.id == playerId;
                                         });
                                         player.points = playerPoints[playerId];
+                                    }
+
+                                    if(JSON.parse(response)['gameWon']) {
+                                        alert("game over");
                                     }
 
                                     game.players.forEach(function (element, index, array) {

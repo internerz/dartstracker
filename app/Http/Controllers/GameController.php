@@ -72,6 +72,7 @@ class GameController extends Controller
         // TODO: verfiy user data
         $leg = Leg::find($request->get('leg'));
         $pointsArray = json_decode($request->get('points'));
+        $game = Game::find($request->get('game'));
 
         foreach ($pointsArray as $data) {
             $point = new Point;
@@ -82,13 +83,26 @@ class GameController extends Controller
 
         }
 
+        $this->storeRound($request);    // behandelt die gleichen Daten
+        $round = Round::where('user_id', $request->get('user'))->where('leg_id', $request->get('leg'))->orderBy('id', 'desc')->first();
+
+        $gameWon = false;
+        if($round->rest == 0) {
+            $gameWon = true;
+
+            // TODO: set legWinner, create new Leg (if there is no game-winner) otherwise redirecting doesn't work because getCurrentLeg() returns null
+            //$user = User::find($request->get('user'));
+            //$game->setLegWinner($user);
+        }
+
         $response = [
             'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
             'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
-            'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer()
+            'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
+            'gameWon' => $gameWon
         ];
 
-        $this->storeRound($request);    // behandelt die gleichen Daten
+
 
         return \Response::json(json_encode($response));
     }
