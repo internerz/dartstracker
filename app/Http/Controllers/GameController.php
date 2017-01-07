@@ -7,6 +7,7 @@ use App\Leg;
 use App\Mode;
 use App\GameOrder;
 use App\Point;
+use App\Round;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -87,6 +88,8 @@ class GameController extends Controller
             'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer()
         ];
 
+        $this->storeRound($request);    // behandelt die gleichen Daten
+
         return \Response::json(json_encode($response));
     }
 
@@ -132,5 +135,24 @@ class GameController extends Controller
         ];
 
         return \Response::json(json_encode($response));
+    }
+
+    public function storeRound(Request $request) {
+        $leg = Leg::find($request->get('leg'));
+        $pointsArray = json_decode($request->get('points'));
+
+        //var_dump("test", $pointsArray);
+        $sum = 0;
+        foreach ($pointsArray as $data) {
+            $sum += $data[0] * $data[1];
+        }
+
+        $round = new Round;
+        $round->user_id = $request->get('user');
+        $round->score = $sum;
+        $round->rest = 0;
+        $leg->rounds()->save($round);
+
+        return false;
     }
 }

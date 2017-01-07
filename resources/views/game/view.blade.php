@@ -7,6 +7,7 @@
                 <h1>Game #{{ $game->id }}</h1>
 
                 Mode: {{ $game->mode->name }}<br/>
+                Mode-Score: {{$game->mode->score}}<br />
                 Ruleset: {{ $game->ruleset }}<br/>
                 Number of legs to win: {{ $game->number_of_legs_to_win }}<br/>
                 Current leg: {{ $game->legs->count() }}<br/>
@@ -26,7 +27,7 @@
                         <div class="col-md-{{ 12/count($game->users) }} col-xs-6">
                             <a href="{{ route('show-user', $user->id) }}">{{ $user->name }}</a><br/>
                             <span class="score"
-                                  id="id-{{$user->id}}">501 : {{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
+                                  id="id-{{$user->id}}">{{$game->mode->score}} : {{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
                             <span id="state-{{$user->id}}">Current State: {{$game->getCurrentState($user)->name}}</span>
                         </div>
                     @endforeach

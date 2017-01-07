@@ -16,6 +16,10 @@ class Leg extends Model
         return $this->hasMany(Point::class);
     }
 
+    public function rounds(){
+        return $this->hasMany(Round::class);
+    }
+
     public function users() {
         return $this->hasMany(User::class);
     }
