@@ -345,7 +345,7 @@
                                         player.points = playerPoints[playerId];
                                     }
 
-                                    if(JSON.parse(response)['gameWon']) {
+                                    if(JSON.parse(response)['legWon']) {
                                         alert("game over");
                                     }
 

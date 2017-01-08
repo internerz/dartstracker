@@ -86,20 +86,34 @@ class GameController extends Controller
         $this->storeRound($request);    // behandelt die gleichen Daten
         $round = Round::where('user_id', $request->get('user'))->where('leg_id', $request->get('leg'))->orderBy('id', 'desc')->first();
 
-        $gameWon = false;
+        $legWon = false;
         if($round->rest == 0) {
-            $gameWon = true;
+            $legWon = true;
 
             // TODO: set legWinner, create new Leg (if there is no game-winner) otherwise redirecting doesn't work because getCurrentLeg() returns null
-            //$user = User::find($request->get('user'));
-            //$game->setLegWinner($user);
+            $user = User::find($request->get('user'));
+            $game->setLegWinner($user);
+
+            $users = $game->users;
+            $newLeg = true;
+            foreach($users as $user){
+                if($game->getCurrentLegWins($user) == $game->number_of_legs_to_win){
+                    $game->setGameWinner($user);
+                    $newLeg = false;
+                    break;
+                }
+            }
+
+            if($newLeg){
+                $this->createLeg($game);
+            }
         }
 
         $response = [
             'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
             'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
             'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
-            'gameWon' => $gameWon
+            'legWon' => $legWon
         ];
 
 

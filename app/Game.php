@@ -59,6 +59,20 @@ class Game extends Model
 
 
     /**
+     * @param \App\User $user
+     */
+    public function setGameWinner(User $user){
+        $this->winner_user_id = $user->id;
+        $this->save();
+    }
+
+    public function getCurrentLegWins(User $user)
+    {
+        return $this->legs()->where('winner_user_id', $user->id)->count();
+    }
+
+
+    /**
      * @return boolean
      */
     public function hasNextLeg()
