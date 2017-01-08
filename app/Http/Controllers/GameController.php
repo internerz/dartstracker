@@ -27,9 +27,13 @@ class GameController extends Controller
         if (in_array($game->id, \Auth::user()->games()->get()->pluck('id')->toArray())) {
             $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
 
-            $currentLeg = $game->getCurrentLeg();
 
-            return view('game.view', compact('game', 'currentLeg'));
+            if($game->winner_user_id == null){
+                $currentLeg = $game->getCurrentLeg();
+                return view('game.view', compact('game', 'currentLeg'));
+            } else {
+                return view('game.aftermath', compact('game'));
+            }
         } else {
             abort(404, 'You are not part of this game.');
         }
@@ -85,7 +89,7 @@ class GameController extends Controller
 
         $this->storeRound($request);    // behandelt die gleichen Daten
         $round = Round::where('user_id', $request->get('user'))->where('leg_id', $request->get('leg'))->orderBy('id', 'desc')->first();
-
+        $response = [];
         $legWon = false;
         if($round->rest == 0) {
             $legWon = true;
@@ -100,21 +104,30 @@ class GameController extends Controller
                 if($game->getCurrentLegWins($user) == $game->number_of_legs_to_win){
                     $game->setGameWinner($user);
                     $newLeg = false;
+                    $response = ['gameWon' => true];
                     break;
                 }
             }
 
             if($newLeg){
                 $this->createLeg($game);
+                $response = [
+                    'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
+                    'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
+                    'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
+                    'legWon' => $legWon
+                ];
             }
+        } else {
+            $response = [
+                'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
+                'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
+                'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
+                'legWon' => $legWon
+            ];
         }
 
-        $response = [
-            'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
-            'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
-            'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
-            'legWon' => $legWon
-        ];
+
 
 
 

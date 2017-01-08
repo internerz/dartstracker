@@ -27,7 +27,7 @@
                         <div class="col-md-{{ 12/count($game->users) }} col-xs-6">
                             <a href="{{ route('show-user', $user->id) }}">{{ $user->name }}</a><br/>
                             <span class="score"
-                                  id="id-{{$user->id}}">{{$game->mode->score}} : {{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
+                                  id="id-{{$user->id}}">{{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
                             <span id="state-{{$user->id}}">Current State: {{$game->getCurrentState($user)->name}}</span>
                         </div>
                     @endforeach
@@ -115,6 +115,7 @@
 
                             this.gameOver = function () {
                                 // set gameOver
+                                // TODO: needed?
                             }
 
                             // handle Input
@@ -309,20 +310,20 @@
                             button.prop('disabled', true);
                             points = [];
 
-                            $.ajax({
-                                type: "POST",
-                                url: '{{ route('store-state', $game->id) }}',
-                                data: {
-                                    _token: csrf_token,
-                                    user: game.currentPlayer.id,
-                                    game: "{{ $game->id }}",
-                                    state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously
-                                },
-                                success: function (response) {
-                                    updatePlayerStates();
-                                },
-                                dataType: 'json'
-                            });
+                            {{--$.ajax({--}}
+                                {{--type: "POST",--}}
+                                {{--url: '{{ route('store-state', $game->id) }}',--}}
+                                {{--data: {--}}
+                                    {{--_token: csrf_token,--}}
+                                    {{--user: game.currentPlayer.id,--}}
+                                    {{--game: "{{ $game->id }}",--}}
+                                    {{--state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously--}}
+                                {{--},--}}
+                                {{--success: function (response) {--}}
+                                    {{--updatePlayerStates();--}}
+                                {{--},--}}
+                                {{--dataType: 'json'--}}
+                            {{--});--}}
 
                             $.ajax({
                                 type: "POST",
@@ -330,7 +331,7 @@
                                 data: {
                                     _token: csrf_token,
                                     user: game.currentPlayer.id,
-                                    leg: "{{ $currentLeg->id }}",
+                                    leg: "{{ $currentLeg->id }}",   // TODO: currentLeg muss noch manuell geupdatet werden!
                                     game: "{{$game->id}}",
                                     points: data,
                                 },
