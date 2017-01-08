@@ -346,8 +346,13 @@
                                         player.points = playerPoints[playerId];
                                     }
 
+                                    // TODO: there must be a better solution than this....
+                                    if(JSON.parse(response)['gameWon']){
+                                        window.location.reload();
+                                    }
+
                                     if(JSON.parse(response)['legWon']) {
-                                        alert("game over");
+                                        window.location.reload();
                                     }
 
                                     game.players.forEach(function (element, index, array) {

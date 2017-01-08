@@ -94,7 +94,6 @@ class GameController extends Controller
         if($round->rest == 0) {
             $legWon = true;
 
-            // TODO: set legWinner, create new Leg (if there is no game-winner) otherwise redirecting doesn't work because getCurrentLeg() returns null
             $user = User::find($request->get('user'));
             $game->setLegWinner($user);
 
@@ -104,7 +103,8 @@ class GameController extends Controller
                 if($game->getCurrentLegWins($user) == $game->number_of_legs_to_win){
                     $game->setGameWinner($user);
                     $newLeg = false;
-                    $response = ['gameWon' => true];
+                    $response = ['gameWon'=> true];
+                    //return redirect()->route('view-game', $game->id); doesnt work with ajax-calls?
                     break;
                 }
             }
@@ -126,10 +126,6 @@ class GameController extends Controller
                 'legWon' => $legWon
             ];
         }
-
-
-
-
 
         return \Response::json(json_encode($response));
     }
