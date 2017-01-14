@@ -25,8 +25,13 @@
                                         <div class="col-xs-6">geworfen</div>
                                     @endif
                                     @foreach($rounds as $round)
-                                        <div class="col-xs-6">{{$round->score}}</div>
-                                        <div class="col-xs-6 {{$round->rest == 0 ? 'underline' : ''}}">{{$round->rest}}</div>
+                                        @if (array_search($playerId, array_keys($leg)) % 2 == 0)
+                                            <div class="col-xs-6">{{$round->score}}</div>
+                                            <div class="col-xs-6 {{$round->rest == 0 ? 'underline' : ''}}">{{$round->rest}}</div>
+                                        @else
+                                            <div class="col-xs-6 {{$round->rest == 0 ? 'underline' : ''}}">{{$round->rest}}</div>
+                                            <div class="col-xs-6">{{$round->score}}</div>
+                                        @endif
                                     @endforeach
                                 @endforeach
                             </div>
