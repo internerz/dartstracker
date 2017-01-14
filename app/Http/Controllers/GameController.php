@@ -32,7 +32,8 @@ class GameController extends Controller
                 $currentLeg = $game->getCurrentLeg();
                 return view('game.view', compact('game', 'currentLeg'));
             } else {
-                return view('game.aftermath', compact('game'));
+                $gameInformation = $game->getInformation();
+                return view('game.aftermath', compact('game', 'gameInformation'));
             }
         } else {
             abort(404, 'You are not part of this game.');
@@ -135,6 +136,7 @@ class GameController extends Controller
     {
         $leg = new Leg;
         $game->legs()->save($leg);
+        $leg->users()->sync($game->users()->get()->pluck('id')->toArray());
     }
 
 

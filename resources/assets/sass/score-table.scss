@@ -1,0 +1,21 @@
+.score-table {
+  padding-bottom: 20px;
+
+  .name {
+    color: red;
+  }
+
+  .underline {
+    text-decoration: underline;
+  }
+
+  .col-xs-6, .col-xs-4, .col-xs-3, .col-xs-12 {
+    padding-left: 0;
+    padding-right: 0;
+    text-align: center;
+
+    .col-xs-6, .col-xs-4, .col-xs-3, .col-xs-12 {
+      text-align: center;
+    }
+  }
+}

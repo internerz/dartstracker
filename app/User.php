@@ -59,4 +59,7 @@ class User extends Authenticatable
         return $this->hasMany(Round::class);
     }
 
+    public function legs() {
+        return $this->belongsToMany(Leg::class);
+    }
 }

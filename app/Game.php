@@ -170,4 +170,43 @@ class Game extends Model
 
         return $states;
     }
+
+    public function getAftergameInformation(){
+        $gameInformation = [];
+        $legs = $this->legs()->get();
+        $users = $this->users()->get();
+
+        for ($i = 0; $i < count($legs); $i++){
+            $leg = $legs[$i];
+            $rounds = $leg->rounds()->get();
+            $legInformation = [];
+            foreach($rounds as $round){
+                if(isset($legInformation[$round->user_id])){
+                    array_push($legInformation[$round->user_id], $round);
+                } else {
+                    $legInformation[$round->user_id] = array();
+                    array_push($legInformation[$round->user_id], $round);
+                }
+            }
+            //dd($legInformation);
+            $gameInformation[$i] = $legInformation;
+        }
+        dd($gameInformation);
+
+        return $gameInformation;
+    }
+
+    public function getInformation(){
+        $legs = $this->legs()->get();
+
+        $data = [];
+        foreach($legs as $i =>$leg){
+            $data[$i] = [];
+            foreach($leg->users()->get() as $user){
+                $data[$i][$user->id][] = $leg->rounds()->where('user_id', $user->id)->get();
+            }
+        }
+        //dd($data);
+        return $data;
+    }
 }
