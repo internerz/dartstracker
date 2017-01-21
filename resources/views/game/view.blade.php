@@ -155,6 +155,7 @@
 
                             // handle Input
                             this.handleInput = function (el) {
+                                console.log(this.currentPlayer, this.currentPlayer.currentState);
                                 this.currentPlayer.currentState.handleInput(el);
                             }
                         }
@@ -196,7 +197,56 @@
                             return sum;
                         }
 
-                        var DoubleIn = function () {
+                        var SingleIn = function(game) {
+                            this.game = game;
+                            this.name = "SingleIn";
+                            this.phase = "Start";
+                            this.id = 6;
+
+                            this.setGame = function(game) {
+                                this.game = game;
+                            }
+
+                            this.handleInput = function (el) {
+
+                                var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+
+                                if (points.length < 3) {
+                                    switch (scoreParameters[0]) {
+                                        case "s":
+                                            points.push([0, singleMultiplier]);
+                                            this.game.currentPlayer.setStateByPhase("Playing");
+                                            break;
+                                        case "d":
+                                            points.push([scoreParameters[1], doubleMultiplier]);
+                                            this.game.currentPlayer.setStateByPhase("Playing");
+                                            break;
+                                        case "t":
+                                            points.push([0, trippleMultiplier]);
+                                            this.game.currentPlayer.setStateByPhase("Playing");
+                                            break;
+                                        case "Bull":
+                                            points.push([bullseye, singleMultiplier]);
+                                            this.game.currentPlayer.setStateByPhase("Playing");
+                                            break;
+                                        case "Outer":
+                                            points.push([0, singleMultiplier]);
+                                            this.game.currentPlayer.setStateByPhase("Playing");
+                                            break;
+                                        default:
+                                            console.log("something bad happened");
+                                    }
+
+                                    updateGui(el);
+                                }
+
+                                if (points.length == 3) {
+                                    button.prop('disabled', false);
+                                }
+                            }
+                        };
+
+                        var DoubleIn = function (game) {
                             this.game = game;
                             this.name = "DoubleIn";
                             this.phase = "Start";
@@ -217,7 +267,7 @@
                                             break;
                                         case "d":
                                             points.push([scoreParameters[1], doubleMultiplier]);
-                                            game.currentPlayer.setStateByPhase("Playing");
+                                            this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "t":
                                             points.push([0, trippleMultiplier]);
@@ -358,6 +408,7 @@
                             }
                         }
 
+                        possibleStates.push(new SingleIn());
                         possibleStates.push(new DoubleIn());
                         possibleStates.push(new DoubleOut());
                         possibleStates.push(new Playing());
