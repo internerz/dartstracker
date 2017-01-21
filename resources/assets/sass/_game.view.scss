@@ -1,0 +1,61 @@
+.game-view {
+  .headline {
+    margin: 0 0 35px;
+    text-align: center;
+
+    @media (max-width: $screen-xs-max) {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .board {
+    user-select: none;
+    
+    @media (max-width: $screen-sm-max) {
+      margin: 0 (-$grid-gutter-width/2);
+    }
+  }
+
+  .currentSore button {
+    margin-top: 10px;
+  }
+
+  .currentScoreElement {
+    & > div {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    span {
+      color: $dartboard-red;
+      cursor: pointer;
+      font-size: 14px;
+      margin-left: 3px;
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  .score .playerScore {
+    font-weight: bold;
+  }
+
+  .gameinfo {
+    .toggle {
+      &[aria-expanded="true"] .collapsed {
+        display: none;
+      }
+
+      &[aria-expanded="false"] {
+        .extended {
+          display: none;
+        }
+
+        .collapsed {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

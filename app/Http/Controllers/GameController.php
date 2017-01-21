@@ -24,6 +24,8 @@ class GameController extends Controller
 
     public function view(Game $game)
     {
+        $class = 'game-view';
+
         if (in_array($game->id, \Auth::user()->games()->get()->pluck('id')->toArray())) {
             $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
 
@@ -32,7 +34,7 @@ class GameController extends Controller
                 $currentLeg = $game->getCurrentLeg();
                 $string = file_get_contents("finishes.json");
                 $finishes = json_decode($string, true);
-                return view('game.view', compact('game', 'currentLeg', 'finishes'));
+                return view('game.view', compact('game', 'currentLeg', 'finishes', 'class'));
             } else {
                 $gameInformation = $game->getInformation();
                 return view('game.aftermath', compact('game', 'gameInformation'));
