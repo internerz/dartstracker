@@ -155,7 +155,8 @@ class GameController extends Controller
             $order->game_id = $game->id;
             $order->user_id = $user->id;
             $order->position = $position;
-            $order->state_id = 3;           // TODO: change to starting state
+            $startState = $game->states()->where('phase', 'Start')->first();
+            $order->state_id = $startState->id;           // TODO: change to starting state
             $order->save();
         }
     }
