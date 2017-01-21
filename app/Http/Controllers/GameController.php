@@ -30,7 +30,9 @@ class GameController extends Controller
 
             if($game->winner_user_id == null){
                 $currentLeg = $game->getCurrentLeg();
-                return view('game.view', compact('game', 'currentLeg'));
+                $string = file_get_contents("finishes.json");
+                $finishes = json_decode($string, true);
+                return view('game.view', compact('game', 'currentLeg', 'finishes'));
             } else {
                 $gameInformation = $game->getInformation();
                 return view('game.aftermath', compact('game', 'gameInformation'));

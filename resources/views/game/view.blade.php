@@ -28,7 +28,8 @@
                             <a href="{{ route('show-user', $user->id) }}">{{ $user->name }}</a><br/>
                             <span class="score"
                                   id="id-{{$user->id}}">{{ $game->getCurrentPointsOfPlayer($user)}}</span><br />
-                            <span id="state-{{$user->id}}">Current State: {{$game->getCurrentState($user)->name}}</span>
+                            <span id="state-{{$user->id}}">Current State: {{$game->getCurrentState($user)->name}}</span><br />
+                            <span id="finish-{{$user->id}}">Finish: -</span>
                         </div>
                     @endforeach
                 </div>
@@ -77,6 +78,8 @@
                         var singleMultiplier = 1;
                         var doubleMultiplier = 2;
                         var trippleMultiplier = 3;
+
+                        var finishes = {!! json_encode($finishes) !!};
 
                         var Game = function () {
                             var self = this;
@@ -401,13 +404,14 @@
                             currentScoreElement.append('<div class="col-md-4">'
                                     + score + '<span class="glyphicon glyphicon-remove"></span></div>');
                             var lastScoreElement = currentScoreElement.find('div').last();
+                            updateFinishElement(score);
 
                             lastScoreElement.find('span').click(function () {
                                 currentScore = currentScore - score;
                                 points.splice(currentScoreElement.find('div').index($(this).parent()), 1);
                                 updateScoreElement(currentScore);
                                 lastScoreElement.remove();
-
+                                updateFinishElement(-score);
                                 if (points.length < 3) {
                                     button.prop('disabled', true);
                                 }
@@ -416,6 +420,17 @@
 
                         function updateScoreElement(score) {
                             playerScoreElement.text(score);
+                        }
+
+                        function updateFinishElement(score) {
+                            var p = game.currentPlayer.points;
+                            var finishElement = $('#finish-' + game.currentPlayer.id);
+                            var h = p - _sumOfPoints(points);
+                            if(h < 171) {
+                                finishElement.text('Finish: ' + finishes[h]);
+                            }
+
+
                         }
 
                         function removePointElements() {
