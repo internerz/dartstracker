@@ -94,6 +94,7 @@
 
                         var startingScore = 0;
                         var currentScore = startingScore;
+                        var possibleStates = [];
 
                         var bullseye = 50;
                         var outer = 25;
@@ -106,31 +107,45 @@
                         var Game = function () {
                             var self = this;
                             this.players = [];
-                            this.states = [new Playing(this)];        // TODO: get out of backend
+                            //this.states = [new Playing(this)];        // TODO: get out of backend
+                            this.states = [];
+                            var states = {!! json_encode($game->states()->get()) !!};
+                            _.forEach(states, function(value){
+                                possibleStates.forEach(function(element) {
+                                    if(value.id == element.id) {
+                                        element.setGame(self);
+                                        self.states.push(element);
+                                    }
+                                })
+                            })
 
-                            var gameinfo = {!! json_encode($game) !!};
+                            var gameInfo = {!! json_encode($game) !!};
                             var stateInfo = {!! json_encode($game->getCurrentStateOfAllPlayer()) !!};
                             var scoreInfo = {!! json_encode($game->getCurrentPointsOfAllPlayer()) !!};
 
-                            gameinfo.users.forEach(function (element, index, array) {
 
-                                var player = new Player(element, self.states);
-                                player.currentStateId = stateInfo[player.id].id;
-//                                player.setState(player.currentStateId);
-                                self.players.push(player);
+                            this.setupPlayers = function()
+                            {
+                                gameInfo.users.forEach(function (element, index, array) {
+                                    var player = new Player(element);
+                                    player.currentStateId = stateInfo[player.id].id;
+                                    player.setState(player.currentStateId);
+                                    self.players.push(player);
 
-                                // TODO: set State
-                            });
-
-                            for (var playerId in scoreInfo) {
-                                var player = self.players.find(function (player) {
-                                    return player.id == playerId;
+                                    // TODO: set State
                                 });
-                                player.points = scoreInfo[playerId];
+                            }
+
+                            this.setupPlayerPoints = function() {
+                                for (var playerId in scoreInfo) {
+                                    var player = self.players.find(function (player) {
+                                        return player.id == playerId;
+                                    });
+                                    player.points = scoreInfo[playerId];
+                                }
                             }
 
                             this.setCurrentPlayer = function (playerObject) {
-//                                console.log("ob", playerObject)
                                 var currentPlayer = self.players.find(function (player) {
                                     return player.id == playerObject.id;
                                 });
@@ -138,42 +153,58 @@
                                 self.currentPlayer = currentPlayer;
                             };
 
-                            this.gameOver = function () {
-                                // set gameOver
-                                // TODO: needed?
-                            }
-
                             // handle Input
                             this.handleInput = function (el) {
                                 this.currentPlayer.currentState.handleInput(el);
                             }
                         }
 
-                        var Player = function (player, states) {
+                        var Player = function (player) {
                             var self = this;
                             this.id = player.id;
                             this.name = player.name;
                             this.points = 0;
-                            this.states = states;       // überflüssig? einfach game.states?
-                            this.statesIndex = 0;
-                            this.currentState = this.states[self.statesIndex];
-                            this.currentStateId = 0;
+                            this.currentState = null;
+                            this.currentStateId = null;
 
-                            this.setState = function (id) {
-                                this.states.forEach(function (element, index, array) {
-                                    if (element.id == id) {
-                                        self.currentState = element;
-                                        self.currentStateId = id;
-                                        //TODO: add break-mechanism
-                                    }
+                            this.setState = function(id) {
+                                game.states.forEach(function(element, index, array){
+                                   if(element.id == id){
+                                       self.currentState = element;
+                                       self.currentStateId = id;
+                                   }
                                 });
+                            }
+
+                            this.setStateByPhase = function(phase) {
+                                game.states.forEach(function(element){
+                                    if(element.phase == phase) {
+                                        self.currentState = element;
+                                        self.currentStateId = element.id;
+                                    }
+                                })
                             }
                         }
 
-                        var DoubleIn = function (game) {
+                        var _sumOfPoints = function(array){
+                            var sum = 0;
+
+                            _.forEach(array, function(value){
+                                sum += value[0] * value[1];
+                            })
+
+                            return sum;
+                        }
+
+                        var DoubleIn = function () {
                             this.game = game;
                             this.name = "DoubleIn";
+                            this.phase = "Start";
                             this.id = 1; //TODO: set with db
+
+                            this.setGame = function(game){
+                                this.game = game;
+                            }
 
                             this.handleInput = function (el) {
 
@@ -186,14 +217,14 @@
                                             break;
                                         case "d":
                                             points.push([scoreParameters[1], doubleMultiplier]);
-                                            game.currentPlayer.setState(2);
+                                            game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "t":
                                             points.push([0, trippleMultiplier]);
                                             break;
                                         case "Bull":
                                             points.push([bullseye, singleMultiplier]);
-                                            game.currentPlayer.setState(2);
+                                            game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "Outer":
                                             points.push([0, singleMultiplier]);
@@ -214,7 +245,12 @@
                         var DoubleOut = function (game) {
                             this.game = game;
                             this.name = "DoubleOut";
+                            this.phase = "End";
                             this.id = 2; // TODO: set with db
+
+                            this.setGame = function(game){
+                                this.game = game;
+                            }
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
@@ -249,6 +285,7 @@
                             }
                         }
 
+
                         var _sumOfPoints = function (array) {
                             var sum = 0;
 
@@ -262,11 +299,17 @@
                         var Playing = function (game) {
                             this.game = game;
                             this.name = "Playing";
+                            this.phase = "Playing";
                             this.id = 3; // TODO: set with db
+
+                            this.setGame = function(game){
+                                this.game = game;
+                            }
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
                                 var finished = false;
+
 
                                 if (points.length < 3) {
                                     switch (scoreParameters[0]) {
@@ -292,14 +335,15 @@
                                     // TODO: check if points reached 170 (area of finishing)
 
                                     // TODO: check if points reached 0 (win)
+
                                     if (game.currentPlayer.points - _sumOfPoints(points) == 0) {
                                         finished = true;
                                     }
 
                                     // TODO: check if overthrown
-                                    if (game.currentPlayer.points - _sumOfPoints(points) < 0) {
-                                        _.forEach(points, function (value) {
-                                            value[0] = 0;
+                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function(value){
+                                           value[0] = 0;
                                         });
                                         finished = true;
                                         // TODO: mark foul
@@ -314,7 +358,12 @@
                             }
                         }
 
+                        possibleStates.push(new DoubleIn());
+                        possibleStates.push(new DoubleOut());
+                        possibleStates.push(new Playing());
                         var game = new Game();
+                        game.setupPlayers();
+                        game.setupPlayerPoints();
 
                         var currentPlayer = {!! json_encode($game->getCurrentPlayer()) !!};
                         game.setCurrentPlayer(currentPlayer);
@@ -335,20 +384,20 @@
                             button.prop('disabled', true);
                             points = [];
 
-                            {{--$.ajax({--}}
-                                {{--type: "POST",--}}
-                                {{--url: '{{ route('store-state', $game->id) }}',--}}
-                                {{--data: {--}}
-                                    {{--_token: csrf_token,--}}
-                                    {{--user: game.currentPlayer.id,--}}
-                                    {{--game: "{{ $game->id }}",--}}
-                                    {{--state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously--}}
-                                {{--},--}}
-                                {{--success: function (response) {--}}
-                                    {{--updatePlayerStates();--}}
-                                {{--},--}}
-                                {{--dataType: 'json'--}}
-                            {{--});--}}
+                            $.ajax({
+                                type: "POST",
+                                url: '{{ route('store-state', $game->id) }}',
+                                data: {
+                                    _token: csrf_token,
+                                    user: game.currentPlayer.id,
+                                    game: "{{ $game->id }}",
+                                    state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously
+                                },
+                                success: function (response) {
+                                    updatePlayerStates();
+                                },
+                                dataType: 'json'
+                            });
 
                             $.ajax({
                                 type: "POST",

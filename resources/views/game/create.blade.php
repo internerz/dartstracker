@@ -39,7 +39,7 @@
                         <label for="ending-rule" name="ending-rule">Ending Rule</label>
                         <select class="form-control" id="ending-rule" name="ending-rule">
                             <option value="2">Double-Out</option>
-                            <option value="4">Tripple-Out</option>
+                            <!--option value="4">Tripple-Out</option-->
                             <option value="5">Bulls-Out</option>
                         </select>
                     </div>

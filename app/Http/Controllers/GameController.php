@@ -118,6 +118,7 @@ class GameController extends Controller
 
             if($newLeg){
                 $this->createLeg($game);
+                $this->resetStates($game);
                 $response = [
                     'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
                     'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
@@ -156,7 +157,18 @@ class GameController extends Controller
             $order->user_id = $user->id;
             $order->position = $position;
             $startState = $game->states()->where('phase', 'Start')->first();
-            $order->state_id = $startState->id;           // TODO: change to starting state
+            $order->state_id = $startState->id;
+            $order->save();
+        }
+    }
+
+    public function resetStates(Game $game){
+        $users = $game->users;
+
+        foreach($users as $user){
+            $order = GameOrder::where('game_id', $game->id)->where('user_id', $user->id)->first();
+            $startState = $game->states()->where('phase', 'Start')->first();
+            $order->state_id = $startState->id;
             $order->save();
         }
     }
@@ -186,7 +198,6 @@ class GameController extends Controller
     public function storeRound(Request $request) {
         $leg = Leg::find($request->get('leg'));
         $game = Game::find($request->get('game'));
-        // for w/e-fucking reason not working: $game = $leg->game()->get();
         $user = User::find($request->get('user'));
         $pointsArray = json_decode($request->get('points'));
 
