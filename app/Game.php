@@ -37,6 +37,11 @@ class Game extends Model
         return $this->hasMany(GameOrder::class);
     }
 
+    public function states()
+    {
+        return $this->belongsToMany(State::class);
+    }
+
 
     /**
      * @return \App\Leg
