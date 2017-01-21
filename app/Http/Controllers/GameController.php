@@ -59,6 +59,7 @@ class GameController extends Controller
     {
         // TODO: validate user input
         // TODO: throw errors
+
         $game = new Game();
         $game->mode_id = $request->get('mode');
         $game->ruleset = $request->get('ruleset');
@@ -66,6 +67,7 @@ class GameController extends Controller
         $game->save();
 
         // TODO: validate, check if user is existing
+        $game->states()->sync([$request->get('starting-rule'), 3, $request->get('ending-rule')]);
         $opponents = json_decode($request->get('opponents'));
         $opponents[] = \Auth::user()->id;
         $game->users()->sync($opponents);

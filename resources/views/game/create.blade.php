@@ -28,6 +28,23 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="start">Starting Rule</label>
+                        <select class="form-control" id="starting-rule" name="starting-rule">
+                            <option value="6">Single-In</option>
+                            <option value="1">Double-In</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ending-rule" name="ending-rule">Ending Rule</label>
+                        <select class="form-control" id="ending-rule" name="ending-rule">
+                            <option value="2">Double-Out</option>
+                            <option value="4">Tripple-Out</option>
+                            <option value="5">Bulls-Out</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="numberOfLegsToWin">Number of legs to win</label>
                         <input type="number" class="form-control" id="numberOfLegsToWin" name="legs" min="1" max="99"
                                value="2">
