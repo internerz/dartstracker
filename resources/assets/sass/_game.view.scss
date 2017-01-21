@@ -1,4 +1,8 @@
 .game-view {
+  &.touching {
+    overflow: hidden;
+  }
+
   .headline {
     margin: 0 0 35px;
     text-align: center;
@@ -9,9 +13,21 @@
     }
   }
 
+  .points {
+    position: relative;
+
+    .preview {
+      display: none;
+      font-size: 5vmin;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+  }
+
   .board {
     user-select: none;
-    
+
     @media (max-width: $screen-sm-max) {
       margin: 0 (-$grid-gutter-width/2);
     }

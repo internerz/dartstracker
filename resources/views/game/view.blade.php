@@ -16,11 +16,12 @@
 
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8">
                 <div class="points" id="points">
+                    <div class="preview" id="preview"><span class="sdt">T</span><span class="number">20</span></div>
                     @include('game.dartboard')
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-5 col-lg-4">
+            <div class="col-xs-12 col-md-5 col-lg-4">
                 <div class="currentSore">
                     <h3 id="score" class="score">
                         <span id="playerName">{{ $game->getCurrentPlayer()->name }}</span> darts:
@@ -330,6 +331,54 @@
                             game.handleInput($(this));
                         });
 
+                        // Touch moving function
+                        var lastTarget, target;
+                        var preview = $('#preview');
+                        board.find("#areas")
+                                .on('touchstart', function () {
+                                    $('body').addClass('touching');
+                                })
+                                .on('touchstart touchmove', function (e) {
+                                    var pos = e.originalEvent.changedTouches[0];
+                                    target = document.elementFromPoint(pos.clientX, pos.clientY);
+
+                                    if (($(target).is('path') || $(target).is('circle')) && $(target).parent().attr('id') != 'score') {
+                                        if (lastTarget != null) {
+                                            if (target != lastTarget) {
+                                                lastTarget.css('opacity', 1);
+                                                preview.hide();
+                                            }
+                                        }
+
+                                        $(target).css('opacity', 0.5);
+                                        preview.show();
+
+                                        var scoreParameters = getScoreParameters($(target));
+
+                                        if (scoreParameters.length > 1) {
+                                            preview.find('.sdt').text(scoreParameters[0].toUpperCase()).attr('class', 'sdt').addClass(scoreParameters[0]);
+                                            preview.find('.number').text(scoreParameters[1]);
+                                        } else {
+                                            preview.find('.sdt').text('').attr('class', 'sdt').addClass(scoreParameters[0].toLowerCase());
+                                            preview.find('.number').text(scoreParameters[0]);
+                                        }
+
+                                        lastTarget = $(target);
+                                    } else {
+                                        lastTarget.css('opacity', 1);
+                                        preview.hide();
+                                    }
+                                })
+                                .on('touchend', function () {
+                                    lastTarget.css('opacity', 1);
+                                    preview.hide();
+                                    $('body').removeClass('touching');
+
+                                    if ($(target).parent().parent().attr('id') == 'areas') {
+                                        game.handleInput(lastTarget);
+                                    }
+                                });
+
                         button.click(function () {
                             var data = JSON.stringify(points);
                             button.prop('disabled', true);
@@ -461,7 +510,7 @@
 
                         function getScorePoints(el) {
                             var scoredPoints = 0;
-                            var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+                            var scoreParameters = getScoreParameters(el);
 
                             switch (scoreParameters[0]) {
                                 case "s":
@@ -484,6 +533,10 @@
                             }
 
                             return scoredPoints;
+                        }
+
+                        function getScoreParameters(el) {
+                            return el.attr('id').split(/(\d+)/).filter(Boolean);
                         }
                     }
             );
