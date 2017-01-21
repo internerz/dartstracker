@@ -155,7 +155,6 @@
 
                             // handle Input
                             this.handleInput = function (el) {
-                                console.log(this.currentPlayer, this.currentPlayer.currentState);
                                 this.currentPlayer.currentState.handleInput(el);
                             }
                         }
@@ -386,7 +385,7 @@
 
                                     // TODO: check if points reached 0 (win)
 
-                                    if (game.currentPlayer.points - _sumOfPoints(points) == 0) {
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
                                         finished = true;
                                     }
 
