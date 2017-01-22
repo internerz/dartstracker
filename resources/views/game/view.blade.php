@@ -546,8 +546,8 @@
                         });
 
                         function updateGui(el) {
-                            addPointsElement(getScorePoints(el));
                             currentScore = currentScore + getScorePoints(el);
+                            addPointsElement(getScorePoints(el));
                             updateScoreElement(currentScore);
                         }
 
@@ -558,7 +558,7 @@
                         function updatePlayerPoints() {
                             game.players.forEach(function (element, index, array) {
                                 var field = scoreBoard.find('#id-' + element.id);
-                                field.text(element.points);
+                                field.text(element.points - currentScore);
                             });
                         }
 
@@ -585,7 +585,10 @@
                                 if (points.length < 3) {
                                     button.prop('disabled', true);
                                 }
+                                updatePlayerPoints();
                             });
+
+                            updatePlayerPoints();
                         }
 
                         function updateScoreElement(score) {
