@@ -67,6 +67,8 @@
 
 @section('javascript')
     <script type="text/javascript">
+        var data2 = {!! json_encode($userLegPointStats) !!};
+        console.log(data2);
         var data = [3, 6, 2, 7, 5, 2, 1, 3, 8, 9, 2, 5, 7];
         w = 400;
         h = 200;
