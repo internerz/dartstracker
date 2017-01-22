@@ -42,8 +42,10 @@ class UserController extends Controller
     {
         $user = User::with('friends')->find($user->id);
         $areFriends = in_array(\Auth::id(), $user->friends()->pluck('friend_id')->toArray());
+        $userLegPointStats = $user->getLegPointStatistics();
+        dd($userLegPointStats);
 
-        return view('user.show', compact('user', 'areFriends'));
+        return view('user.show', compact('user', 'areFriends', 'userLegPointStats'));
     }
 
 
@@ -52,8 +54,9 @@ class UserController extends Controller
         if (\Auth::check()) {
             $user = \Auth::user();
             $friends = $user->friends()->get();
+            $userLegPointStats = $user->getLegPointStatistics();
 
-            return view('user.show', compact('user', 'friends'));
+            return view('user.show', compact('user', 'friends', 'userLegPointStats'));
         } else {
             abort(403, 'Unauthorized action.');
         }
