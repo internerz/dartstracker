@@ -197,6 +197,16 @@
                             return sum;
                         }
 
+                        var _sumOfPoints = function (array) {
+                            var sum = 0;
+
+                            _.forEach(array, function (value) {
+                                sum += value[0] * value[1];
+                            })
+
+                            return sum;
+                        }
+
                         var SingleIn = function(game) {
                             this.game = game;
                             this.name = "SingleIn";
@@ -326,6 +336,12 @@
                                             console.log("something bad happened");
                                     }
 
+                                    // TODO: check if points reached 0
+
+                                    // TODO: check for double end
+
+                                    // TODO: check if overthrown
+
                                     updateGui(el);
                                 }
 
@@ -333,17 +349,6 @@
                                     button.prop('disabled', false);
                                 }
                             }
-                        }
-
-
-                        var _sumOfPoints = function (array) {
-                            var sum = 0;
-
-                            _.forEach(array, function (value) {
-                                sum += value[0] * value[1];
-                            })
-
-                            return sum;
                         }
 
                         var Playing = function (game) {
@@ -384,6 +389,11 @@
 
                                     // TODO: check if points reached 170 (area of finishing)
 
+                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 171){
+                                        this.game.currentPlayer.setStateByPhase("End");
+                                        console.log(this.game.currentPlayer.currentState);
+                                    }
+
                                     // TODO: check if points reached 0 (win)
 
                                     if (this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
@@ -408,8 +418,69 @@
                             }
                         }
 
+                        var SingleOut = function (game) {
+                            this.game = game;
+                            this.name = "SingleOut";
+                            this.phase = "End";
+                            this.id = 7; // TODO: set with db
+
+                            this.setGame = function(game){
+                                this.game = game;
+                            }
+
+                            this.handleInput = function (el) {
+                                var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+                                var finished = false;
+
+
+                                if (points.length < 3) {
+                                    switch (scoreParameters[0]) {
+                                        case "s":
+                                            points.push([scoreParameters[1], singleMultiplier]);
+                                            break;
+                                        case "d":
+                                            points.push([scoreParameters[1], doubleMultiplier]);
+                                            break;
+                                        case "t":
+                                            points.push([scoreParameters[1], trippleMultiplier]);
+                                            break;
+                                        case "Bull":
+                                            points.push([bullseye, singleMultiplier]);
+                                            break;
+                                        case "Outer":
+                                            points.push([outer, singleMultiplier]);
+                                            break;
+                                        default:
+                                            console.log("something bad happened");
+                                    }
+
+                                    // TODO: check if points reached 0 (win)
+
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
+                                        finished = true;
+                                    }
+
+                                    // TODO: check if overthrown
+                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function(value){
+                                            value[0] = 0;
+                                        });
+                                        finished = true;
+                                        // TODO: mark foul
+                                    }
+
+                                    updateGui(el);
+                                }
+
+                                if (points.length == 3 || finished) {
+                                    button.prop('disabled', false);
+                                }
+                            }
+                        }
+
                         possibleStates.push(new SingleIn());
                         possibleStates.push(new DoubleIn());
+                        possibleStates.push(new SingleOut());
                         possibleStates.push(new DoubleOut());
                         possibleStates.push(new Playing());
                         var game = new Game();
@@ -534,11 +605,12 @@
                                         }
                                     });
 
+                                    currentScore = 0;
                                     removePointElements();
                                     updateScoreElement(startingScore);
                                     updatePlayerStrings();
                                     updatePlayerPoints();
-                                    currentScore = 0;
+
                                 },
                                 dataType: 'json'
                             });
