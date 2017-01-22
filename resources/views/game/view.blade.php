@@ -214,7 +214,7 @@
                                 if (points.length < 3) {
                                     switch (scoreParameters[0]) {
                                         case "s":
-                                            points.push([0, singleMultiplier]);
+                                            points.push([scoreParameters[1], singleMultiplier]);
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "d":
@@ -222,7 +222,7 @@
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "t":
-                                            points.push([0, trippleMultiplier]);
+                                            points.push([scoreParameters[1], trippleMultiplier]);
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "Bull":
@@ -230,7 +230,7 @@
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         case "Outer":
-                                            points.push([0, singleMultiplier]);
+                                            points.push([outer, singleMultiplier]);
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
                                         default:
