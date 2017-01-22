@@ -32,6 +32,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/{user}', 'UserController@show')->name('show-user');
 
     Route::put('/', 'UserController@store')->name('store-user');
+    Route::put('/notifications', 'UserController@markNotificationAsRead')->name('read-notification');
 });
 
 Route::group(['prefix' => 'admin'], function () {
@@ -46,6 +47,9 @@ Route::group(['prefix' => 'friends'], function () {
     Route::get('/', 'FriendController@index')->name('list-friends');
 
     Route::post('/', 'FriendController@add')->name('add-friend');
+
+    Route::put('/{user}/accept', 'FriendController@accept')->name('accept-friend');
+    Route::put('/{user}/reject', 'FriendController@reject')->name('reject-friend');
 
     Route::delete('/', 'FriendController@remove')->name('remove-friend');
 });

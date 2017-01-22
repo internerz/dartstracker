@@ -55,6 +55,14 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="dropdown notification-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+                            <span class="count">{{ Auth::user()->unreadNotifications->count() }}</span>
+                        </a>
+
+                        @include('layouts.notifications')
+                    </li>
                 @endif
             </ul>
         </div>
