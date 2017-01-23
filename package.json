@@ -8,6 +8,7 @@
     "bootstrap-sass": "^3.3.7",
     "buble": "^0.14.0",
     "css-loader": "^0.25.0",
+    "d3": "^4.4.4",
     "gulp": "^3.9.1",
     "jquery": "^3.1.0",
     "jquery-ui-dist": "1.12.*",
