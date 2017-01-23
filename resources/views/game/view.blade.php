@@ -321,6 +321,7 @@
 
                             this.handleInput = function (el) {
                                 var scoreParameters = el.attr('id').split(/(\d+)/).filter(Boolean);
+                                var finished = false;
 
                                 if (points.length < 3) {
                                     switch (scoreParameters[0]) {
@@ -346,16 +347,29 @@
                                             console.log("something bad happened");
                                     }
 
-                                    // TODO: check if points reached 0
-
-                                    // TODO: check for double end
-
-                                    // TODO: check if overthrown
+                                    if(this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
+                                        if(points[points.length - 1][1] == 2) {
+                                            console.log("DoubleOut");
+                                            finished = true;
+                                        } else {
+                                            _.forEach(points, function(value){
+                                                value[0] = 0;
+                                            });
+                                            finished = true;
+                                            // TODO: mark foul --> set all score-elements to 0
+                                        }
+                                    } else if (this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function(value){
+                                            value[0] = 0;
+                                        });
+                                        finished = true;
+                                        // TODO: mark foul --> set all score-elements to 0
+                                    }
 
                                     updateGui(el);
                                 }
 
-                                if (points.length == 3) {
+                                if (points.length == 3 || finished) {
                                     button.prop('disabled', false);
                                 }
                             }
