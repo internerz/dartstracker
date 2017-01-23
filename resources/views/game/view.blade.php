@@ -391,7 +391,6 @@
 
                                     if(this.game.currentPlayer.points - _sumOfPoints(points) < 171){
                                         this.game.currentPlayer.setStateByPhase("End");
-                                        console.log(this.game.currentPlayer.currentState);
                                     }
 
                                     // TODO: check if points reached 0 (win)
@@ -630,7 +629,10 @@
                         function updatePlayerPoints() {
                             game.players.forEach(function (element, index, array) {
                                 var field = scoreBoard.find('#id-' + element.id);
-                                field.text(element.points - currentScore);
+                                field.text(element.points);
+                                if(element == game.currentPlayer){
+                                    field.text(element.points - currentScore);
+                                }
                             });
                         }
 
