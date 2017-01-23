@@ -102,6 +102,7 @@
                         var singleMultiplier = 1;
                         var doubleMultiplier = 2;
                         var trippleMultiplier = 3;
+                        var misthrow = 0;
 
                         var finishes = {!! json_encode($finishes) !!};
 
@@ -243,6 +244,9 @@
                                             points.push([outer, singleMultiplier]);
                                             this.game.currentPlayer.setStateByPhase("Playing");
                                             break;
+                                        case "outer_ring":
+                                            points.push([misthrow, singleMultiplier]);
+                                            break;
                                         default:
                                             console.log("something bad happened");
                                     }
@@ -289,6 +293,9 @@
                                         case "Outer":
                                             points.push([0, singleMultiplier]);
                                             break;
+                                        case "outer_ring":
+                                            points.push([misthrow, singleMultiplier]);
+                                            break;
                                         default:
                                             console.log("something bad happened");
                                     }
@@ -331,6 +338,9 @@
                                             break;
                                         case "Outer":
                                             points.push([outer, singleMultiplier]);
+                                            break;
+                                        case "outer_ring":
+                                            points.push([misthrow, singleMultiplier]);
                                             break;
                                         default:
                                             console.log("something bad happened");
@@ -382,6 +392,9 @@
                                             break;
                                         case "Outer":
                                             points.push([outer, singleMultiplier]);
+                                            break;
+                                        case "outer_ring":
+                                            points.push([misthrow, singleMultiplier]);
                                             break;
                                         default:
                                             console.log("something bad happened");
@@ -448,6 +461,9 @@
                                             break;
                                         case "Outer":
                                             points.push([outer, singleMultiplier]);
+                                            break;
+                                        case "outer_ring":
+                                            points.push([misthrow, singleMultiplier]);
                                             break;
                                         default:
                                             console.log("something bad happened");
@@ -703,6 +719,9 @@
                                     break;
                                 case "Outer":
                                     scoredPoints = 25;
+                                    break;
+                                case "outer_ring":
+                                    scoredPoints = misthrow;
                                     break;
                                 default:
                                     console.log("something happened");
