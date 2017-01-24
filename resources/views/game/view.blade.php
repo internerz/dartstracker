@@ -114,9 +114,9 @@
                             //this.states = [new Playing(this)];        // TODO: get out of backend
                             this.states = [];
                             var states = {!! json_encode($game->states()->get()) !!};
-                            _.forEach(states, function(value){
-                                possibleStates.forEach(function(element) {
-                                    if(value.id == element.id) {
+                            _.forEach(states, function (value) {
+                                possibleStates.forEach(function (element) {
+                                    if (value.id == element.id) {
                                         element.setGame(self);
                                         self.states.push(element);
                                     }
@@ -128,8 +128,7 @@
                             var scoreInfo = {!! json_encode($game->getCurrentPointsOfAllPlayer()) !!};
 
 
-                            this.setupPlayers = function()
-                            {
+                            this.setupPlayers = function () {
                                 gameInfo.users.forEach(function (element, index, array) {
                                     var player = new Player(element);
                                     player.currentStateId = stateInfo[player.id].id;
@@ -140,7 +139,7 @@
                                 });
                             }
 
-                            this.setupPlayerPoints = function() {
+                            this.setupPlayerPoints = function () {
                                 for (var playerId in scoreInfo) {
                                     var player = self.players.find(function (player) {
                                         return player.id == playerId;
@@ -171,18 +170,18 @@
                             this.currentState = null;
                             this.currentStateId = null;
 
-                            this.setState = function(id) {
-                                game.states.forEach(function(element, index, array){
-                                   if(element.id == id){
-                                       self.currentState = element;
-                                       self.currentStateId = id;
-                                   }
+                            this.setState = function (id) {
+                                game.states.forEach(function (element, index, array) {
+                                    if (element.id == id) {
+                                        self.currentState = element;
+                                        self.currentStateId = id;
+                                    }
                                 });
                             }
 
-                            this.setStateByPhase = function(phase) {
-                                game.states.forEach(function(element){
-                                    if(element.phase == phase) {
+                            this.setStateByPhase = function (phase) {
+                                game.states.forEach(function (element) {
+                                    if (element.phase == phase) {
                                         self.currentState = element;
                                         self.currentStateId = element.id;
                                     }
@@ -190,10 +189,10 @@
                             }
                         }
 
-                        var _sumOfPoints = function(array){
+                        var _sumOfPoints = function (array) {
                             var sum = 0;
 
-                            _.forEach(array, function(value){
+                            _.forEach(array, function (value) {
                                 sum += value[0] * value[1];
                             })
 
@@ -210,13 +209,13 @@
                             return sum;
                         }
 
-                        var SingleIn = function(game) {
+                        var SingleIn = function (game) {
                             this.game = game;
                             this.name = "SingleIn";
                             this.phase = "Start";
                             this.id = 6;
 
-                            this.setGame = function(game) {
+                            this.setGame = function (game) {
                                 this.game = game;
                             }
 
@@ -268,7 +267,7 @@
                             this.phase = "Start";
                             this.id = 1; //TODO: set with db
 
-                            this.setGame = function(game){
+                            this.setGame = function (game) {
                                 this.game = game;
                             }
 
@@ -317,7 +316,7 @@
                             this.phase = "End";
                             this.id = 2; // TODO: set with db
 
-                            this.setGame = function(game){
+                            this.setGame = function (game) {
                                 this.game = game;
                             }
 
@@ -349,19 +348,19 @@
                                             console.log("something bad happened");
                                     }
 
-                                    if(this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
-                                        if(points[points.length - 1][1] == 2) {
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) == 0) {
+                                        if (points[points.length - 1][1] == 2) {
                                             console.log("DoubleOut");
                                             finished = true;
                                         } else {
-                                            _.forEach(points, function(value){
+                                            _.forEach(points, function (value) {
                                                 value[0] = 0;
                                             });
                                             finished = true;
                                             // TODO: mark foul --> set all score-elements to 0
                                         }
                                     } else if (this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
-                                        _.forEach(points, function(value){
+                                        _.forEach(points, function (value) {
                                             value[0] = 0;
                                         });
                                         finished = true;
@@ -383,7 +382,7 @@
                             this.phase = "Playing";
                             this.id = 3; // TODO: set with db
 
-                            this.setGame = function(game){
+                            this.setGame = function (game) {
                                 this.game = game;
                             }
 
@@ -418,7 +417,7 @@
 
                                     // TODO: check if points reached 170 (area of finishing)
 
-                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 171){
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) < 171) {
                                         this.game.currentPlayer.setStateByPhase("End");
                                     }
 
@@ -429,9 +428,9 @@
                                     }
 
                                     // TODO: check if overthrown
-                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
-                                        _.forEach(points, function(value){
-                                           value[0] = 0;
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function (value) {
+                                            value[0] = 0;
                                         });
                                         finished = true;
                                         // TODO: mark foul
@@ -452,7 +451,7 @@
                             this.phase = "End";
                             this.id = 7; // TODO: set with db
 
-                            this.setGame = function(game){
+                            this.setGame = function (game) {
                                 this.game = game;
                             }
 
@@ -492,8 +491,8 @@
                                     }
 
                                     // TODO: check if overthrown
-                                    if(this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
-                                        _.forEach(points, function(value){
+                                    if (this.game.currentPlayer.points - _sumOfPoints(points) < 0) {
+                                        _.forEach(points, function (value) {
                                             value[0] = 0;
                                         });
                                         finished = true;
@@ -666,7 +665,7 @@
                             game.players.forEach(function (element, index, array) {
                                 var field = scoreBoard.find('#id-' + element.id);
                                 field.text(element.points);
-                                if(element == game.currentPlayer){
+                                if (element == game.currentPlayer) {
                                     field.text(element.points - currentScore);
                                 }
                             });
