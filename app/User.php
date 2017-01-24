@@ -19,6 +19,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'guest',
     ];
 
     /**
@@ -67,18 +68,21 @@ class User extends Authenticatable
         return $this->belongsToMany(Leg::class);
     }
 
+
     public function friendStatuses()
     {
         return $this->hasMany(FriendStatus::class);
     }
 
-    public function getLegPointStatistics() {
+
+    public function getLegPointStatistics()
+    {
         $legs = $this->legs()->get();
 
         $data = [];
-        foreach ($legs as $i => $leg){
+        foreach ($legs as $i => $leg) {
             $data[$leg->id] = [];
-            foreach($leg->rounds()->get() as $j => $round){
+            foreach ($leg->rounds()->get() as $j => $round) {
                 // TODO: filter out empty legs
                 $data[$leg->id][$j] = $round;
             }

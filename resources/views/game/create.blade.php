@@ -5,7 +5,11 @@
         <div class="row">
             <div class="col-md-12">
                 <h1>Create Game</h1>
-                <form method="POST" action="{{ route('store-game') }}">
+                @if (Auth::guest())
+                    <form method="POST" action="{{ route('view-game-guest') }}">
+                @else
+                    <form method="POST" action="{{ route('store-game') }}">
+                @endif
                     {{ csrf_field() }}
 
                     <div class="form-group">
@@ -50,19 +54,28 @@
                                value="2">
                     </div>
 
-                    <div class="form-group">
-                        <label for="opponentSearch">Search for opponent</label>
-                        <input type="text" class="form-control" id="opponentSearch">
-                        <input type="hidden" id="opponents" name="opponents">
-                    </div>
+                    @if (Auth::guest())
+                        <div class="form-group" id="players">
+                            <label for="player1">Player 1</label>
+                            <input type="text" class="form-control" id="player1" name="player1">
+                            <label for="player2">Player 2</label>
+                            <input type="text" class="form-control" id="player2" name="player2">
+                        </div>
+                    @else
+                        <div class="form-group">
+                            <label for="opponentSearch">Search for opponent</label>
+                            <input type="text" class="form-control" id="opponentSearch">
+                            <input type="hidden" id="opponents" name="opponents">
+                        </div>
 
-                    <label>Opponents</label>
-                    <div class="list-group" id="opponentList">
-                        <a href="#" class="list-group-item hidden" title="Remove opponent">
-                            <span class="name"></span> <span class="glyphicon glyphicon-trash pull-right"
-                                                             aria-hidden="true"></span>
-                        </a>
-                    </div>
+                        <label>Opponents</label>
+                        <div class="list-group" id="opponentList">
+                            <a href="#" class="list-group-item hidden" title="Remove opponent">
+                                <span class="name"></span> <span class="glyphicon glyphicon-trash pull-right"
+                                                                 aria-hidden="true"></span>
+                            </a>
+                        </div>
+                    @endif
 
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
@@ -75,6 +88,49 @@
 @section('javascript')
     <script type="text/javascript">
         $(document).ready(function () {
+
+            @if (Auth::guest())
+            $('form').submit(function () {
+                var states = JSON.parse('{!! $states !!}');
+                var gameInfo = {};
+                gameInfo['users'] = [];
+                gameInfo['stateInfo'] = {};
+                gameInfo['scoreInfo'] = {};
+
+                // get player names
+                $('#players').find('input').each(function (i) {
+                    var playerName = $(this).val().trim().length ? $(this).val().trim() : 'Player' + (i+1);
+                    gameInfo['users'].push({ 'id': i, 'name': playerName });
+
+                    // set state info
+                    var state = states.filter(function( obj ) {
+                        return obj.id == $('#starting-rule').val();
+                    });
+
+                    gameInfo['stateInfo'][i] = {
+                        'id': $('#starting-rule').val(),
+                        'name': state[0].name,
+                        'phase': state[0].phase
+                    };
+
+                    // set score info
+                    gameInfo['scoreInfo'][i] = parseInt($('#mode').find('option:selected').text());
+                });
+
+                // get the rest of the info
+                $(this).find('input, select').each(function () {
+                    if ($(this).attr('name') != '_token' && !$(this).attr('name').match('/player/')) {
+                        gameInfo[$(this).attr('name')] = $(this).val();
+                    }
+                });
+
+                // set current player
+                gameInfo['currentPlayer'] = gameInfo['users'][0];
+
+                toLocalStorage('gameInfo', gameInfo);
+            });
+
+                    @else
             var users = [];
             var opponentList = $('#opponentList');
 
@@ -85,9 +141,9 @@
                     users.push(friend.id);
                     var element = opponentList.find('a.hidden').clone();
                     element
-                        .removeClass('hidden')
-                        .data('id', friend.id)
-                        .find('.name').text(friend.name);
+                            .removeClass('hidden')
+                            .data('id', friend.id)
+                            .find('.name').text(friend.name);
 
                     element.click(function () {
                         users.splice(users.indexOf(friend.id), 1);
@@ -118,9 +174,9 @@
 
                         var element = opponentList.find('a.hidden').clone();
                         element
-                            .removeClass('hidden')
-                            .data('id', ui.item.id)
-                            .find('.name').text(ui.item.value);
+                                .removeClass('hidden')
+                                .data('id', ui.item.id)
+                                .find('.name').text(ui.item.value);
 
                         element.click(function () {
                             users.splice(users.indexOf(ui.item.id), 1);
@@ -136,6 +192,7 @@
                     $('#opponents').val(JSON.stringify(users));
                 }
             });
+            @endif
         });
     </script>
 @endsection

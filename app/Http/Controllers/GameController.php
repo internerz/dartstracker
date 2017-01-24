@@ -8,6 +8,7 @@ use App\Mode;
 use App\GameOrder;
 use App\Point;
 use App\Round;
+use App\State;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -29,14 +30,15 @@ class GameController extends Controller
         if (in_array($game->id, \Auth::user()->games()->get()->pluck('id')->toArray())) {
             $game = Game::with('users')->with('legs')->with('mode')->find($game->id);
 
-
-            if($game->winner_user_id == null){
+            if ($game->winner_user_id == null) {
                 $currentLeg = $game->getCurrentLeg();
                 $string = file_get_contents("finishes.json");
                 $finishes = json_decode($string, true);
+
                 return view('game.view', compact('game', 'currentLeg', 'finishes', 'class'));
             } else {
                 $gameInformation = $game->getInformation();
+
                 return view('game.aftermath', compact('game', 'gameInformation'));
             }
         } else {
@@ -45,18 +47,40 @@ class GameController extends Controller
     }
 
 
+    public function viewGuest(Request $request)
+    {
+        $class = 'game-view';
+        $mode = Mode::find($request->get('mode'));
+        $string = file_get_contents("finishes.json");
+        $finishes = json_decode($string, true);
+        $states = json_encode(State::find([
+            intval($request->get('starting-rule')),
+            3,
+            intval($request->get('ending-rule')),
+        ])->toArray());
+
+        return view('game.view-guest', compact(
+            'mode',
+            'finishes',
+            'states',
+            'class'
+        ));
+    }
+
+
     public function create(Request $request)
     {
-        //$friend = $request->friend;
         $friend = User::find($request->friend);
         $modes = Mode::all();
+        $states = State::all()->toJson();
 
-        return view('game.create', array_add(compact('modes'), 'friend', $friend));
+        return view('game.create', compact('modes', 'friend', 'states'));
     }
 
 
     public function store(Request $request)
     {
+
         // TODO: validate user input
         // TODO: throw errors
 
@@ -67,9 +91,28 @@ class GameController extends Controller
         $game->save();
 
         // TODO: validate, check if user is existing
-        $game->states()->sync([$request->get('starting-rule'), 3, $request->get('ending-rule')]);
-        $opponents = json_decode($request->get('opponents'));
-        $opponents[] = \Auth::user()->id;
+        $game->states()->sync([ $request->get('starting-rule'), 3, $request->get('ending-rule') ]);
+
+        if (\Auth::guest()) { // is not logged in?
+            if ($request->get('player1')) { // has entered a name for player 1?
+                $existingUser = User::where('name', $request->get('player1'))->first();
+
+                if ($existingUser) { // check if name is already taken
+                    preg_match('/\d*$/', $existingUser->name, $number); // has name a number at the end?
+                    dd((int) $number[0]);
+                    //$request->get('player1')
+                } else {
+                    dd("player not already there");
+
+                    User::create([
+                        'name' => $request->get('player1'),
+                    ]);
+                }
+            }
+        } else {
+            $opponents = json_decode($request->get('opponents'));
+            $opponents[] = \Auth::user()->id;
+        }
         $game->users()->sync($opponents);
         $this->createLeg($game);
         $this->setOrder($game);
@@ -95,10 +138,11 @@ class GameController extends Controller
         }
 
         $this->storeRound($request);    // behandelt die gleichen Daten
-        $round = Round::where('user_id', $request->get('user'))->where('leg_id', $request->get('leg'))->orderBy('id', 'desc')->first();
+        $round = Round::where('user_id', $request->get('user'))->where('leg_id', $request->get('leg'))->orderBy('id',
+            'desc')->first();
         $response = [];
         $legWon = false;
-        if($round->rest == 0) {
+        if ($round->rest == 0) {
             $legWon = true;
 
             $user = User::find($request->get('user'));
@@ -106,32 +150,32 @@ class GameController extends Controller
 
             $users = $game->users;
             $newLeg = true;
-            foreach($users as $user){
-                if($game->getCurrentLegWins($user) == $game->number_of_legs_to_win){
+            foreach ($users as $user) {
+                if ($game->getCurrentLegWins($user) == $game->number_of_legs_to_win) {
                     $game->setGameWinner($user);
                     $newLeg = false;
-                    $response = ['gameWon'=> true];
+                    $response = [ 'gameWon' => true ];
                     //return redirect()->route('view-game', $game->id); doesnt work with ajax-calls?
                     break;
                 }
             }
 
-            if($newLeg){
+            if ($newLeg) {
                 $this->createLeg($game);
                 $this->resetStates($game);
                 $response = [
                     'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
                     'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
-                    'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
-                    'legWon' => $legWon
+                    'playerPoints'   => $leg->game->getCurrentPointsOfAllPlayer(),
+                    'legWon'         => $legWon
                 ];
             }
         } else {
             $response = [
                 'nextPlayerId'   => $leg->game->getCurrentPlayer()->id,
                 'nextPlayerName' => $leg->game->getCurrentPlayer()->name,
-                'playerPoints' => $leg->game->getCurrentPointsOfAllPlayer(),
-                'legWon' => $legWon
+                'playerPoints'   => $leg->game->getCurrentPointsOfAllPlayer(),
+                'legWon'         => $legWon
             ];
         }
 
@@ -162,16 +206,19 @@ class GameController extends Controller
         }
     }
 
-    public function resetStates(Game $game){
+
+    public function resetStates(Game $game)
+    {
         $users = $game->users;
 
-        foreach($users as $user){
+        foreach ($users as $user) {
             $order = GameOrder::where('game_id', $game->id)->where('user_id', $user->id)->first();
             $startState = $game->states()->where('phase', 'Start')->first();
             $order->state_id = $startState->id;
             $order->save();
         }
     }
+
 
     public function storeState(Request $request)
     {
@@ -189,13 +236,15 @@ class GameController extends Controller
         //dd($gameOrder);
 
         $response = [
-            'currentState'   => $game->getCurrentState($user)
+            'currentState' => $game->getCurrentState($user)
         ];
 
         return \Response::json(json_encode($response));
     }
 
-    public function storeRound(Request $request) {
+
+    public function storeRound(Request $request)
+    {
         $leg = Leg::find($request->get('leg'));
         $game = Game::find($request->get('game'));
         $user = User::find($request->get('user'));

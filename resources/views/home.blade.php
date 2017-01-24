@@ -8,8 +8,9 @@
 
                 @if (Auth::guest())
                     <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation"><a href="{{ route('login') }}">Login</a></li>
-                        <li role="presentation"><a href="{{ route('register') }}">Register</a></li>
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                        <li><a href="{{ route('register') }}">Register</a></li>
+                        <li><a href="{{ route('create-game-guest') }}">Create game</a></li>
                     </ul>
                 @else
                     <ul class="nav nav-pills nav-stacked">

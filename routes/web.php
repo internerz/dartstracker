@@ -23,6 +23,11 @@ Route::group(['prefix' => 'game'], function () {
     Route::post('/', 'GameController@store')->name('store-game');
     Route::post('/{game}', 'GameController@storePoints')->name('store-points');
     Route::post('/{game}/state', 'GameController@storeState')->name('store-state');
+
+    Route::group(['prefix' => 'guest'], function () {
+        Route::get('/create', 'GameController@create')->name('create-game-guest');
+        Route::post('/play', 'GameController@viewGuest')->name('view-game-guest');
+    });
 });
 
 Route::group(['prefix' => 'user'], function () {
