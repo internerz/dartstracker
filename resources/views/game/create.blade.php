@@ -94,8 +94,8 @@
                 var states = JSON.parse('{!! $states !!}');
                 var gameInfo = {};
                 gameInfo['users'] = [];
-                gameInfo['stateInfo'] = {};
-                gameInfo['scoreInfo'] = {};
+                var stateInfo = {};
+                var scoreInfo = {};
 
                 // get player names
                 $('#players').find('input').each(function (i) {
@@ -107,14 +107,14 @@
                         return obj.id == $('#starting-rule').val();
                     });
 
-                    gameInfo['stateInfo'][i] = {
+                    stateInfo[i] = {
                         'id': $('#starting-rule').val(),
                         'name': state[0].name,
                         'phase': state[0].phase
                     };
 
                     // set score info
-                    gameInfo['scoreInfo'][i] = parseInt($('#mode').find('option:selected').text());
+                    scoreInfo[i] = parseInt($('#mode').find('option:selected').text());
                 });
 
                 // get the rest of the info
@@ -128,6 +128,8 @@
                 gameInfo['currentPlayer'] = gameInfo['users'][0];
 
                 toLocalStorage('gameInfo', gameInfo);
+                toLocalStorage('stateInfo', stateInfo);
+                toLocalStorage('scoreInfo', scoreInfo);
             });
 
                     @else

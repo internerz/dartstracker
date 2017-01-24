@@ -49,7 +49,7 @@ class GameController extends Controller
 
     public function viewGuest(Request $request)
     {
-        $class = 'game-view';
+        $class = 'game-view game-view-guest loading';
         $mode = Mode::find($request->get('mode'));
         $string = file_get_contents("finishes.json");
         $finishes = json_decode($string, true);

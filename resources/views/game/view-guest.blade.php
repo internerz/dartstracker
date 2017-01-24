@@ -19,7 +19,7 @@
             <div class="col-xs-12 col-md-5 col-lg-4">
                 <div class="currentSore">
                     <h3 id="score" class="score">
-                        <span id="playerName"><span class="playerName0">Player 1</span></span> darts:
+                        <span id="playerName">Player 1</span> darts:
                         <span id="playerScore" class="playerScore">0</span>
                     </h3>
                     <div id="currentScoreElement" class="row currentScoreElement"></div>
@@ -32,22 +32,16 @@
                     <div class="col-md-6 col-xs-6">
                         <span class="playerName0">Player 1</span><br/>
                         <span class="score"
+                              id="id-0">{{ $mode->score }}</span><br/>
+                        <span id="state-0">Current State: <span class="state">STATE</span></span><br/>
+                        <span id="finish-0">Finish: -</span>
+                    </div>
+                    <div class="col-md-6 col-xs-6">
+                        <span class="playerName1">Player 2</span><br/>
+                        <span class="score"
                               id="id-1">{{ $mode->score }}</span><br/>
                         <span id="state-1">Current State: <span class="state">STATE</span></span><br/>
                         <span id="finish-1">Finish: -</span>
-                    </div>
-                </div>
-
-                <div class="panel-group gameinfo" id="accordion" role="tablist" aria-multiselectable="true">
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="gameinfoH">
-                            <a role="button" class="toggle" data-toggle="collapse" data-parent="#accordion"
-                               href="#gameinfo" aria-expanded="false" aria-controls="gameinfo">
-                                Game info
-                                <span class="glyphicon glyphicon-plus collapsed"></span>
-                                <span class="glyphicon glyphicon-minus extended"></span>
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -57,8 +51,12 @@
 
 @section('javascript')
     <script type="text/javascript">
+        var game;
+
         $(document).ready(function () {
                     var gameInfo = fromLocalStorage('gameInfo');
+                    var stateInfo = fromLocalStorage('stateInfo');
+                    var scoreInfo = fromLocalStorage('scoreInfo');
                     var points = [];
                     var button = $('#submit');
                     var board = $('#board');
@@ -67,6 +65,9 @@
                     var playerScoreElement = $('#playerScore');
                     var scoreBoard = $('#scoreBoard');
                     var overlay = $('#overlay');
+                    var playerName0 = $('playerName0');
+                    var playerName1 = $('playerName1');
+                    var currentPlayerNameElement = $('currentPlayerNameElement');
 
                     var startingScore = 0;
                     var currentScore = startingScore;
@@ -96,9 +97,6 @@
                                 }
                             })
                         });
-
-                        var stateInfo = gameInfo['stateInfo'];
-                        var scoreInfo = gameInfo['scoreInfo'];
 
                         this.setupPlayers = function () {
                             gameInfo.users.forEach(function (element, index, array) {
@@ -485,12 +483,14 @@
                     possibleStates.push(new SingleOut());
                     possibleStates.push(new DoubleOut());
                     possibleStates.push(new Playing());
-                    var game = new Game();
+                    game = new Game();
                     game.setupPlayers();
                     game.setupPlayerPoints();
 
                     var currentPlayer = gameInfo['currentPlayer'];
                     game.setCurrentPlayer(currentPlayer);
+
+                    initGui();
 
                     board.find("#areas g").children().hover(
                             function () {
@@ -558,64 +558,65 @@
 
                         overlay.addClass('inactive');
 
-                        $.ajax({
-                            type: "POST",
-                            url: 'route(store-state)',
-                            data: {
-                                _token: csrf_token,
-                                user: game.currentPlayer.id,
-                                state_id: game.currentPlayer.currentStateId,  //TODO: change... obviously
-                            },
-                            success: function (response) {
-                                updatePlayerStates();
-                            },
-                            dataType: 'json'
+                        updatePlayerStates();
+
+                        data = JSON.parse(data);
+
+                        var playerPoints = scoreInfo;
+                        playerPoints[game.currentPlayer.id] = playerPoints[game.currentPlayer.id] - _sumOfPoints(data);
+
+                        for (var playerId in playerPoints) {
+                            var player = game.players.find(function (player) {
+                                return player.id == playerId;
+                            });
+                            player.points = playerPoints[playerId];
+                        }
+
+                        //
+//                        // TODO: there must be a better solution than this....
+//                        if (JSON.parse(response)['gameWon']) {
+//                            window.location.reload();
+//                        }
+//
+//                        if (JSON.parse(response)['legWon']) {
+//                            window.location.reload();
+//                        }
+//
+                        var found = false;
+
+                        game.players.forEach(function (player, index, array) {
+                            if (player.id != game.currentPlayer.id && !found) {
+                                game.setCurrentPlayer(player);
+                                gameInfo['currentPlayer'] = {"id": player.id, "name": player.name};
+                                found = true;
+                            }
                         });
 
-                        $.ajax({
-                            type: "POST",
-                            url: 'route(store-points)',
-                            data: {
-                                _token: csrf_token,
-                                user: game.currentPlayer.id,
-                                points: data,
-                            },
-                            success: function (response) {
-                                // TODO: auslagern?
-                                var playerPoints = JSON.parse(response)['playerPoints'];
+                        currentScore = 0;
+                        removePointElements();
+                        updateScoreElement(startingScore);
+                        updatePlayerStrings();
+                        updatePlayerPoints();
 
-                                for (var playerId in playerPoints) {
-                                    var player = game.players.find(function (player) {
-                                        return player.id == playerId;
-                                    });
-                                    player.points = playerPoints[playerId];
-                                }
+                        toLocalStorage('scoreInfo', playerPoints);
+                        toLocalStorage('gameInfo', gameInfo);
 
-                                // TODO: there must be a better solution than this....
-                                if (JSON.parse(response)['gameWon']) {
-                                    window.location.reload();
-                                }
-
-                                if (JSON.parse(response)['legWon']) {
-                                    window.location.reload();
-                                }
-
-                                game.players.forEach(function (element, index, array) {
-                                    if (element.id == JSON.parse(response)['nextPlayerId']) {
-                                        game.setCurrentPlayer(element);
-                                    }
-                                });
-
-                                removePointElements();
-                                updateScoreElement(startingScore);
-                                updatePlayerStrings();
-                                updatePlayerPoints();
-                                currentScore = 0;
-                            },
-                            dataType: 'json'
-                        });
                         return false;
                     });
+
+                    function initGui() {
+                        game.players.forEach(function (player, i, array) {
+                            updatePlayerName(player.id, player.name);
+                            scoreBoard.find('#id-' + i).text(scoreInfo[i]);
+                        });
+                        updatePlayerStrings();
+                        updatePlayerStates();
+                        $('body').removeClass('loading');
+                    }
+
+                    function updatePlayerName(id, name) {
+                        $('.playerName' + id).text(name);
+                    }
 
                     function updateGui(el) {
                         currentScore = currentScore + getScorePoints(el);

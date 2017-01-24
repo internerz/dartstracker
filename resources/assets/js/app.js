@@ -3,5 +3,5 @@ function toLocalStorage(name, item) {
 }
 
 function fromLocalStorage(name) {
-    return JSON.parse(localStorage.getItem('gameInfo'));
+    return JSON.parse(localStorage.getItem(name));
 }
