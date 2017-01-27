@@ -27,6 +27,9 @@ elixir(mix => {
             './node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
             './node_modules/jquery-ui-dist/jquery-ui.js',
             './node_modules/d3/build/d3.js',
+            'game/states.js',
+            'game/player.js',
+            'game/game.js',
             'app.js',
         ], 'public/js/scripts.js')
     ;

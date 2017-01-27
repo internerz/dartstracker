@@ -2,10 +2,10 @@
 
     <g id="areas">
         <g>
-            <circle id="outer_ring" cx="401.5" cy="389" r="385" fill="#000000" />
+            <circle id="miss" cx="401.5" cy="389" r="385" fill="#000000" />
         </g>
 
-        <circle cx="401.5" cy="389" r="332" fill="#FFFFFF" />
+        <circle id="down_under" cx="401.5" cy="389" r="332" fill="#FFFFFF" />
 
         <g
                 id="s">
