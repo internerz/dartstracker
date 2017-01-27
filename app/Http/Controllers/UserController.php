@@ -43,7 +43,6 @@ class UserController extends Controller
         $user = User::with('friends')->find($user->id);
         $areFriends = in_array(\Auth::id(), $user->friends()->pluck('friend_id')->toArray());
         $userLegPointStats = $user->getLegPointStatistics();
-        dd($userLegPointStats);
 
         return view('user.show', compact('user', 'areFriends', 'userLegPointStats'));
     }

@@ -204,13 +204,9 @@ class GameController extends Controller
         $state_id = $request->get('state_id');
         $user = User::find($request->get('user'));
 
-        //dd($game);
-
         $gameOrder = $game->orders()->where('user_id', $user->id)->get()->first();
         $gameOrder->state_id = $state_id;
         $gameOrder->save();
-
-        //dd($gameOrder);
 
         $response = [
             'currentState' => $game->getCurrentState($user)
