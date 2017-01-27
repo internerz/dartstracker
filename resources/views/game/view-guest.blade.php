@@ -60,7 +60,6 @@
                     playerNameElement = $('#playerName');
                     playerScoreElement = $('#playerScore');
                     scoreBoard = $('#scoreBoard');
-                    overlay = $('#overlay');
                     currentPlayerNameElement = $('currentPlayerNameElement');
 
                     game = new Game();
@@ -76,7 +75,7 @@
                         button.prop('disabled', true);
                         points = [];
 
-                        overlay.addClass('inactive');
+                        $('body').addClass('loading');
 
                         updatePlayerStates();
 
@@ -120,6 +119,7 @@
 
                         toLocalStorage('scoreInfo', playerPoints);
                         toLocalStorage('gameInfo', gameInfo);
+                        $('body').removeClass('loading');
 
                         return false;
                     });

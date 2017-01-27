@@ -9,7 +9,7 @@ var currentScore = startingScore;
 var misthrow = 0;
 
 var game, gameInfo, stateInfo, scoreInfo;
-var button, board, currentScoreElement, playerNameElement, playerScoreElement, scoreBoard, overlay, currentPlayerNameElement, csrf_token;
+var button, board, currentScoreElement, playerNameElement, playerScoreElement, scoreBoard, currentPlayerNameElement, csrf_token;
 
 var gameInfo = fromLocalStorage('gameInfo');
 var stateInfo = fromLocalStorage('stateInfo');

@@ -17,7 +17,6 @@
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-7 col-md-offset-0 col-lg-8">
                 <div class="points" id="points">
                     <div class="preview" id="preview"><span class="sdt">T</span><span class="number">20</span></div>
-                    <div id="overlay"></div>
                     @include('game.dartboard')
                 </div>
             </div>
@@ -93,7 +92,6 @@
                         playerNameElement = $('#playerName');
                         playerScoreElement = $('#playerScore');
                         scoreBoard = $('#scoreBoard');
-                        overlay = $('#overlay');
                         currentPlayerNameElement = $('currentPlayerNameElement');
                         csrf_token = $('meta[name="csrf-token"]').attr('content');
 
@@ -112,7 +110,7 @@
                             button.prop('disabled', true);
                             points = [];
 
-                            overlay.addClass('inactive');
+                            $('body').addClass('loading');
 
                             $.ajax({
                                 type: "POST",
@@ -141,7 +139,7 @@
                                 },
                                 success: function (response) {
                                     // TODO: auslagern?
-                                    overlay.removeClass('inactive');
+                                    $('body').removeClass('loading');
 
                                     var playerPoints = JSON.parse(response)['playerPoints'];
 
