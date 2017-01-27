@@ -80,43 +80,20 @@ class GameController extends Controller
 
     public function store(Request $request)
     {
-
         // TODO: validate user input
         // TODO: throw errors
-
         $game = new Game();
         $game->mode_id = $request->get('mode');
         $game->ruleset = $request->get('ruleset');
         $game->number_of_legs_to_win = $request->get('legs');
         $game->save();
-
         // TODO: validate, check if user is existing
-        $game->states()->sync([ $request->get('starting-rule'), 3, $request->get('ending-rule') ]);
-
-        if (\Auth::guest()) { // is not logged in?
-            if ($request->get('player1')) { // has entered a name for player 1?
-                $existingUser = User::where('name', $request->get('player1'))->first();
-
-                if ($existingUser) { // check if name is already taken
-                    preg_match('/\d*$/', $existingUser->name, $number); // has name a number at the end?
-                    dd((int) $number[0]);
-                    //$request->get('player1')
-                } else {
-                    dd("player not already there");
-
-                    User::create([
-                        'name' => $request->get('player1'),
-                    ]);
-                }
-            }
-        } else {
-            $opponents = json_decode($request->get('opponents'));
-            $opponents[] = \Auth::user()->id;
-        }
+        $game->states()->sync([$request->get('starting-rule'), 3, $request->get('ending-rule')]);
+        $opponents = json_decode($request->get('opponents'));
+        $opponents[] = \Auth::user()->id;
         $game->users()->sync($opponents);
         $this->createLeg($game);
         $this->setOrder($game);
-
         return redirect()->route('view-game', $game->id);
     }
 
