@@ -87,7 +87,7 @@ class User extends Authenticatable
                 $data[$leg->id][$j] = $round;
             }
         }
-
+        
         return $data;
     }
 }
